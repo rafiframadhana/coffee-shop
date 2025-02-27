@@ -189,8 +189,12 @@ footer * {
     list-style: none;
 }
 
-.footer-links ul li {
+.footer-links h3 {
     margin-bottom: 10px;
+}
+
+.footer-links ul li {
+    line-height: 26px;
 }
 
 .footer-links ul li a {
