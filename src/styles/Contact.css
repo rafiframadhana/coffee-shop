@@ -125,7 +125,7 @@
     }
 }
 
-@media screen and (max-width: 1400px) {
+@media screen and (max-width: 768px) {
     .contact-us-page {
         padding: 100px 40px 60px 40px;
         height: auto;

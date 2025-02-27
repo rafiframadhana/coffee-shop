@@ -614,6 +614,15 @@
         padding: 0 10px;
     }
 
+    .contact-form {
+        width: 100%;
+    }
+
+    .form-group {
+        flex-direction: column;
+        gap: 10px;
+    }
+
     .about-image,
     .banner img {
         display: none;
