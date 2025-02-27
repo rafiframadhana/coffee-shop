@@ -1,0 +1,357 @@
+@import url("https://fonts.googleapis.com/css?family=Playfair+Display:500,400,700|Clicker+Script:400");
+
+:root {
+    --primary-color: #603809;
+    --secondary-color: #f9c06a;
+    --background-color: #fffdfc;
+    --button-text: #1e1e1e;
+    --text-color: #603809;
+    --white: #ffffff;
+    --font-body: "Playfair Display", serif;
+    --font-heading: "Clicker Script", "Playfair Display";
+    --font-title-color: #603809;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: var(--font-body);
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    background-color: var(--background-color);
+    color: var(--text-color);
+    line-height: 1.6;
+}
+
+/* ======= Navbar ======= */
+.navbar {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 80px;
+    backdrop-filter: blur(5px);
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+    transition: background 0.3s ease-in-out;
+}
+
+.navbar.transparent {
+    background: rgba(255, 255, 255, 0);
+}
+
+.navbar.solid {
+    position: fixed;
+    background: rgba(255, 255, 255, 0.9);
+}
+
+
+.brand-name {
+    font-size: 24px;
+    font-weight: 700;
+    text-decoration: none;
+}
+
+.nav-menu {
+    list-style: none;
+    display: flex;
+}
+
+.nav-menu li {
+    margin: 0 20px;
+}
+
+.nav-menu a {
+    text-decoration: none;
+    font-size: 18px;
+    font-weight: 600;
+}
+
+.nav-menu.home a {
+    color: var(--white);
+}
+
+.nav-menu.not-home a{
+    color: var(--text-color);
+}
+
+.nav-menu a:hover {
+    color: var(--secondary-color);
+}
+
+
+.cart {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    width: 125.69px;
+}
+
+.cart a{
+    display: flex;
+    align-items: center;
+}
+
+.cart-img{
+    width: 25px;
+    cursor: pointer;
+}
+
+.cart-img:hover{
+    opacity: 0.8;
+}
+
+.cart-span {
+    font-family: Arial, Helvetica, sans-serif;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    font-size: 14px;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    z-index: 2;
+    top: 21px;
+    right: 75px;
+    line-height: 1;
+    text-align: center;
+}
+
+.cart-span.home{
+    background-color: rgba(81, 81, 81, 0.782);
+    color: white;
+}
+
+.cart-span.not-home{
+    background-color: rgba(194, 194, 194, 0.89);
+    color: black;
+}
+
+.btn {
+    background: var(--secondary-color);
+    color: var(--button-text);
+    padding: 10px 20px;
+    border-radius: 50px;
+    font-weight: 600;
+    text-decoration: none;
+    display: inline-block;
+    transition: all 0.3s ease;
+}
+
+.btn:hover {
+    background: #e0a65f;
+}
+
+
+
+/* ======= Footer Section ======= */
+footer {
+    position: relative;
+    background: #603809;
+    color: var(--white);
+    padding: 50px 80px;
+}
+
+footer::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: url('/background/footer/footer-bg.png') no-repeat center/cover;
+    opacity: 0.3;
+    z-index: 1;
+}
+
+footer * {
+    position: relative;
+    z-index: 2;
+}
+
+.footer-container {
+    display: flex;
+    justify-content: space-between;
+}
+
+.footer-links ul {
+    list-style: none;
+}
+
+.footer-links ul li {
+    margin-bottom: 10px;
+}
+
+.footer-links ul li a {
+    text-decoration: none;
+    color: var(--white);
+}
+
+.footer-contact p {
+    margin: 5px 0;
+}
+
+@media screen and (max-width: 1024px) {
+    .navbar {
+        padding: 15px 40px;
+    }
+    
+    .nav-menu li {
+        margin: 0 15px;
+    }
+
+    .cart-span{
+        top: 18px;
+        right: 34px;
+    }
+    
+    .btn {
+        padding: 8px 16px;
+        font-size: 14px;
+    }
+
+    
+    footer {
+        padding: 40px 60px;
+    }
+}
+
+@media screen and (max-width: 768px) {
+    .navbar {
+        padding: 30px 30px;
+        align-items: center;
+    }
+
+    .nav-menu {
+        display: none;
+        flex-direction: column;
+        width: 100%;
+        background: rgba(255, 255, 255, 0.9);
+        position: absolute;
+        top: 60px;
+        left: 0;
+        padding: 10px 0;
+        text-align: center;
+    }
+
+    .nav-menu li {
+        margin: 10px 0;
+    }
+
+    .nav-menu a {
+        font-size: 16px;
+    }
+
+    .cart {
+        justify-content: center;
+        margin-top: 10px;
+    }
+
+    .cart-span{
+        right: 75px;
+        top: 35px
+    }
+
+    footer {
+        padding: 30px 40px;
+    }
+
+    .footer-container {
+        padding: 40px 60px;
+    }
+
+    .footer-links ul {
+        padding: 0;
+    }
+}
+
+@media screen and (max-width: 480px) {
+    .navbar {
+        padding: 20px 20px;
+    }
+
+    .brand-name {
+        font-size: 20px;
+    }
+
+    .nav-menu {
+        top: 50px;
+    }
+
+    .btn {
+        padding: 6px 12px;
+        font-size: 12px;
+    }
+
+    footer {
+        padding: 20px 30px;
+    }
+
+    .cart-span{
+        right: 65px;
+        top: 25px
+    }
+
+    .footer-container {
+        padding: 40px 60px;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+    }
+}
+
+.hamburger {
+    display: none;
+}
+
+@media screen and (max-width: 768px) {
+    .hamburger {
+        display: flex;
+        align-items: center;
+        position: absolute;
+        top: 36px;
+        right: 25px;
+        cursor: pointer;
+        z-index: 1100;
+    }
+
+    .nav-menu {
+        display: none;
+        flex-direction: column;
+        position: absolute;
+        top: 60px;
+        left: 0;
+        width: 100%;
+        background: rgba(4, 4, 4, 0.975);
+        text-align: center;
+        padding: 10px 0;
+    }
+
+    .nav-menu.not-home a{
+        color: var(--white);
+    }
+
+    .nav-menu.active {
+        display: flex;
+        margin-top: 16px;
+    }
+}
+
+
+@media screen and (max-width: 480px) {
+    .hamburger {
+        top: 25.5px;
+        right: 25px;
+    }
+}

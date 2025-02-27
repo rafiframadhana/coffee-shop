@@ -1,0 +1,621 @@
+/* ======= Hero Section ======= */
+.hero {
+    position: relative;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    background: url('/background/hero/hero-bg.png') no-repeat center/cover;
+    padding: 80px;
+    height: 100vh;
+    color: var(--white);
+    text-align: left;
+}
+
+.hero::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 1;
+}
+
+.hero * {
+    position: relative;
+    z-index: 2;
+}
+
+.hero-content {
+    max-width: 50%;
+    margin-top: 40px;
+}
+
+.hero-title {
+    font-weight: 400;
+    font-size: 160px;
+    font-style: normal;
+    font-family: var(--font-heading);
+    line-height: 250px;
+}
+
+
+.hero p {
+    font-size: 18px;
+    margin: 20px 0;
+}
+
+/* ======= About Us Section ======= */
+.about {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 120px;
+    padding: 80px;
+    background: var(--white);
+}
+
+.about-image {
+    width: 500px;
+}
+
+.about-text {
+    max-width: 60%;
+}
+
+.about h2 {
+    font-size: 40px;
+    margin-bottom: 20px;
+    color: var(--font-title-color);
+}
+
+.about p {
+    margin-bottom: 40px;
+    font-style: normal;
+    font-weight: 400;
+    font-size: 20px;
+    line-height: 34px;
+    color: #707070;
+}
+
+
+
+
+/* ======= Menu Section ======= */
+.menu {
+    text-align: center;
+    padding: 80px;
+    background: var(--background-color);
+}
+
+.menu h2 {
+    font-size: 40px;
+    margin-bottom: 20px;
+    color: var(--font-title-color);
+}
+
+.menu p {
+    font-style: normal;
+    font-weight: 400;
+    font-size: 18px;
+    color: #707070;
+}
+
+.menu-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 30px;
+    margin-top: 40px;
+}
+
+.menu-item {
+    background: #FFF9F1;
+    position: relative;
+    border-radius: 8px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+    padding-bottom: 40px;
+}
+
+.menu-item img {
+    width: 100%;
+    height: 218px;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+    object-fit: cover;
+}
+
+.menu-item h3 {
+    font-size: 24px;
+    margin: 10px 0;
+}
+
+.menu-item p {
+    font-size: 16px;
+    color: #707070;
+}
+
+.menu-btn {
+    position: absolute;
+    bottom: -25px;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.price {
+    font-size: 20px;
+    font-weight: bold;
+    margin: 10px 0;
+}
+
+/* ======= Why Us Section ======= */
+.why-us {
+    text-align: center;
+    padding: 80px;
+    background: var(--background-color);
+}
+
+.why-us h2 {
+    font-size: 40px;
+    margin-bottom: 20px;
+    color: var(--font-title-color);
+}
+
+.why-us .title-text {
+    font-style: normal;
+    font-weight: 400;
+    font-size: 18px;
+    color: #707070;
+}
+
+.why-us-text {
+    margin: 70px 0 40px 0;
+}
+
+.why-us-text p {
+    font-style: normal;
+    font-weight: 400;
+    font-size: 18px;
+    color: #707070;
+    margin-bottom: 10px;
+}
+
+.why-us-text .btn {
+    margin-top: 10px
+}
+
+.feature-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 30px;
+    margin-top: 40px;
+}
+
+.feature-item {
+    background: #fcf1e2;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+
+.feature-item img {
+    width: 80px;
+    margin-bottom: 10px;
+}
+
+.feature-item h3 {
+    font-size: 22px;
+    margin-bottom: 10px;
+    color: var(--font-title-color);
+}
+
+/* ======= Banner Section ======= */
+.banner {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    gap: 200px;
+    background: url('/background/banner/morning-coffee-bg.png') no-repeat center/cover;
+    align-items: center;
+    padding: 50px;
+    color: var(--white);
+}
+
+.banner::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: #603709b8;
+    z-index: 1;
+}
+
+.banner * {
+    position: relative;
+    z-index: 2;
+}
+
+.banner img {
+    width: 300px;
+}
+
+.banner-text {
+    max-width: 50%;
+}
+
+.banner-text h2 {
+    font-size: 42px;
+    margin-bottom: 20px;
+}
+
+.banner-text p {
+    font-size: 24px;
+    margin-bottom: 20px;
+}
+
+/* ======= Contact Us Section ======= */
+.contact-us {
+    padding: 80px;
+    background: var(--background-color);
+    color: var(--text-color);
+    text-align: center;
+}
+
+.contact-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 0 auto;
+    padding: 50px;
+    border-radius: 10px;
+}
+
+.contact-info {
+    flex: 1;
+    text-align: left;
+    padding-right: 50px;
+}
+
+.contact-info h2 {
+    font-size: 40px;
+    color: var(--font-title-color);
+}
+
+.contact-info p {
+    font-style: normal;
+    font-weight: 400;
+    font-size: 18px;
+    color: #707070;
+    line-height: 40px;
+}
+
+.contact-details p {
+    margin: 8px 0;
+    font-size: 16px;
+    line-height: 25px
+}
+
+.contact-form {
+    flex: 1;
+}
+
+.contact-form form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.form-group {
+    display: flex;
+    gap: 15px;
+}
+
+.form-group input {
+    flex: 1;
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+    transition: border 0.3s ease-in-out;
+}
+
+.form-group input:focus,
+.contact-form textarea:focus {
+    border: 1px solid var(--primary-color);
+    outline: none;
+}
+
+.contact-form textarea {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+    resize: none;
+    transition: border 0.3s ease-in-out;
+}
+
+.contact-form button {
+    background: var(--secondary-color);
+    color: var(--button-text);
+    padding: 12px;
+    font-size: 16px;
+    border: none;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: background 0.3s ease-in-out;
+}
+
+.contact-form button:hover {
+    background: #e0a65f;
+}
+
+
+@media screen and (max-width: 1024px) {
+    .hero {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        padding: 0 10px 30px 10px;
+    }
+
+    .hero-title {
+        font-size: 140px;
+        line-height: 200px;
+    }
+
+    .hero-content {
+        max-width: 70%;
+        margin-top: 35%;
+        line-height: 40px;
+    }
+
+    .about {
+        text-align: center;
+        gap: 40px;
+        padding: 50px 10px 20px 10px;
+    }
+
+    .about-image {
+        display: none;
+    }
+
+    .about-text {
+        max-width: 90%;
+    }
+
+    .menu {
+        padding: 50px 30px 10px 30px;
+    }
+
+    .menu-grid,
+    .feature-grid {
+        grid-template-columns: 1fr 1fr;
+        gap: 20px;
+    }
+
+    .menu-item {
+        margin-bottom: 40px;
+    }
+
+    .why-us {
+        padding: 50px 40px 50px 40px;
+    }
+
+    .banner {
+        gap: 50px;
+        padding: 30px 10px 50px 10px;
+    }
+
+    .banner-text {
+        max-width: 60%;
+    }
+
+    .banner img {
+        width: 200px;
+    }
+
+    .contact-container {
+        text-align: center;
+    }
+
+    .contact-us {
+        padding: 20px 10px 50px 10px;
+    }
+
+    .contact-info,
+    .contact-form {
+        padding: 20px 0;
+    }
+
+    .contact-info {
+        margin-right: 10px;
+    }
+
+    .form-group {
+        flex-direction: column;
+    }
+}
+
+@media screen and (max-width: 768px) {
+    .hero {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        padding: 0 10px 30px 10px;
+    }
+
+    .hero-title {
+        font-size: 140px;
+        line-height: 200px;
+    }
+
+    .hero-content {
+        max-width: 70%;
+        margin-top: 35%;
+        line-height: 40px;
+    }
+
+    .about {
+        text-align: center;
+        gap: 40px;
+        padding: 50px 10px 20px 10px;
+    }
+
+    .about-image {
+        display: none;
+    }
+
+    .about-text {
+        max-width: 90%;
+    }
+
+    .menu {
+        padding: 50px 30px 10px 30px;
+    }
+
+    .menu-grid,
+    .feature-grid {
+        grid-template-columns: 1fr 1fr;
+        gap: 20px;
+    }
+
+    .menu-item {
+        margin-bottom: 40px;
+    }
+
+    .why-us {
+        padding: 50px 40px 50px 40px;
+    }
+
+    .banner {
+        gap: 50px;
+        padding: 30px 10px 50px 10px;
+    }
+
+    .banner-text {
+        max-width: 60%;
+    }
+
+    .banner img {
+        width: 200px;
+    }
+
+    .contact-container {
+        text-align: center;
+    }
+
+    .contact-us {
+        padding: 20px 10px 50px 10px;
+    }
+
+    .contact-info,
+    .contact-form {
+        padding: 20px 0;
+    }
+
+    .contact-info {
+        margin-right: 10px;
+    }
+
+    .form-group {
+        flex-direction: column;
+    }
+}
+
+@media screen and (max-width: 480px) {
+    .hero {
+        padding: 0 10px 30px 10px;
+    }
+
+    .hero-title {
+        font-size: 60px;
+        line-height: 90px;
+    }
+
+    .hero-content {
+        max-width: 90%;
+        margin-top: 50%;
+    }
+
+    .about {
+        padding: 50px 10px 0 10px;
+    }
+
+    .about h2 {
+        font-size: 32px;
+    }
+
+    .menu-grid,
+    .feature-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .menu {
+        padding: 80px 20px 0 20px;
+    }
+
+    .menu-item {
+        margin-bottom: 40px;
+    }
+
+    .menu h2,
+    .why-us h2,
+    .contact-info h2 {
+        font-size: 32px;
+    }
+
+    .menu p,
+    .why-us-text p,
+    .contact-info p {
+        font-size: 16px;
+    }
+
+    .menu-item h3 {
+        font-size: 20px;
+    }
+
+    .menu-btn {
+        bottom: -18px;
+    }
+
+    .btn {
+        font-size: 16px;
+    }
+
+    .why-us {
+        padding: 40px 20px;
+    }
+
+    .banner {
+        padding: 40px 10px 60px 10px;
+    }
+
+    .banner-text {
+        max-width: 90%;
+    }
+
+    .banner-text h2 {
+        font-size: 32px;
+    }
+
+    .contact-form button {
+        font-size: 14px;
+    }
+
+    .contact-container {
+        flex-direction: column;
+    }
+
+    .contact-us {
+        padding: 0 10px;
+    }
+
+    .about-image,
+    .banner img {
+        display: none;
+    }
+}

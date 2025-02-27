@@ -1,0 +1,38 @@
+.about-container {
+    max-width: 800px;
+    margin: auto;
+    padding: 120px 20px;
+    text-align: center;
+}
+
+.about-container h1 {
+    font-size: 2.5rem;
+    color: var(--text-color);
+    margin-bottom: 20px;
+}
+
+.about-container p {
+    font-size: 1.2rem;
+    line-height: 1.8;
+    margin-bottom: 20px;
+    color: #707070;
+}
+
+.about-container h2 {
+    font-size: 2rem;
+    margin-top: 50px;
+    margin-bottom: 30px;
+    color: var(--text-color);
+}
+
+.about-container ul {
+    list-style: none;
+    padding: 0;
+}
+
+.about-container li {
+    font-size: 1.2rem;
+    margin: 10px 0;
+    font-weight: 500;
+    color: #707070;
+}
