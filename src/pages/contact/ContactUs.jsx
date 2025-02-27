@@ -9,7 +9,7 @@ export default function ContactUs() {
                     <div className="contact-page-details">
                         <p><strong>📍 Address:</strong> Jl. Teuku Umar No. 10, Banda Aceh, Indonesia</p>
                         <p><strong>📞 Phone:</strong> +62 812-3456-7890</p>
-                        <p><strong>📧 Email:</strong> info@beanscene.id</p>
+                        <p><strong>📧 Email:</strong> info@coffeeculture.id</p>
                     </div>
                 </div>
                 <div className="contact-page-form">

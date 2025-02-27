@@ -29,7 +29,7 @@ export default function Navbar() {
         <header>
             <nav className={`navbar ${isHome ? "transparent" : "solid"}`}>
                 <Link to="/" className="brand-name" style={{ color: isHome ? "#ffffff" : "black" }}>
-                    Bean Scene
+                    Coffee Culture
                 </Link>
 
                 {/* Hamburger */}

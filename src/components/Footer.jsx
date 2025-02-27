@@ -5,7 +5,7 @@ export default function Footer() {
         <footer>
             <div className="footer-container">
                 <div className="footer-info">
-                    <h3>Bean Scene</h3>
+                    <h3>Coffee Culture</h3>
                     <p>Enjoy the finest coffee every day.</p>
                     <p>© Rafif Ramadhana</p>
                 </div>
@@ -23,7 +23,7 @@ export default function Footer() {
                     <h3>Contact Us</h3>
                     <p>Jl. Teuku Umar No. 10, Banda Aceh, Indonesia</p>
                     <p>+62 812-3456-7890</p>
-                    <p>info@beanscene.id</p>
+                    <p>info@coffeeculture.id</p>
                 </div>
             </div>
 
