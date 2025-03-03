@@ -1,4 +1,4 @@
-import coffeImg from './../../assets/images/banner/morning-coffee.png';
+import coffeImg from "./../../assets/images/banner/morning-coffee.png";
 
 export default function CartEmpty() {
   return (

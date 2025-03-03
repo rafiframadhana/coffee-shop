@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import styled from 'styled-components';
+import styled from "styled-components";
 
 export default function ScrollToTop() {
   const [isVisible, setIsVisible] = useState(false);
@@ -26,8 +26,9 @@ export default function ScrollToTop() {
           </svg>
         </button>
       </StyledWrapper>
-    ));
-};
+    )
+  );
+}
 
 const StyledWrapper = styled.div`
   position: fixed;
@@ -49,7 +50,7 @@ const StyledWrapper = styled.div`
     transition-duration: 0.3s;
     overflow: hidden;
     position: relative;
-    opacity: 0.8
+    opacity: 0.8;
   }
 
   .svgIcon {

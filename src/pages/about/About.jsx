@@ -1,10 +1,10 @@
-import AboutUs from "./AboutUs"
-import './../../styles/About.css';
+import AboutUs from "./AboutUs";
+import "./../../styles/About.css";
 
-export default function About(){
-    return(
-        <>
-            <AboutUs />
-        </>
-    )
+export default function About() {
+  return (
+    <>
+      <AboutUs />
+    </>
+  );
 }
