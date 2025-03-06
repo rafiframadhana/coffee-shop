@@ -7,6 +7,7 @@ import ProductDetails from "./pages/product-details/ProductDetails.jsx";
 import Contact from "./pages/contact/Contact.jsx";
 import CheckoutPage from "./pages/checkout/CheckoutPage.jsx";
 import AutoScrollTop from "./components/AutoScrollTop.jsx";
+import NotFound from './pages/extra/NotFound.jsx';
 
 import Navbar from "./components/Navbar.jsx";
 import Footer from "./components/Footer";
@@ -23,6 +24,7 @@ function App() {
         <Route path="/product/:productId" element={<ProductDetails />} />
         <Route path="/contact" element={<Contact />} />
         <Route path="/checkout" element={<CheckoutPage />} />
+        <Route path="*" element={<NotFound />} />
       </Routes>
       <Footer />
     </Router>
