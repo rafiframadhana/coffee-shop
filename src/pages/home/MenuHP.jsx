@@ -1,7 +1,27 @@
-import { products } from "./../../data/data.js";
 import { Link } from "react-router-dom";
+import { useProducts } from "../../context/ProductContext";
 
 export default function MenuHP() {
+  const {products, loading, error} = useProducts()
+
+  if (loading) {
+    return (
+      <div className="spinner-container-homepage">
+        <div className="spinner"></div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="error-message-home">
+        <div className="error-box">
+          <span className="error-icon">⚠️</span> Failed to load menu
+        </div>
+      </div>
+    );
+  }
+
   const randomProducts = [...products]
     .sort(() => Math.random() - 0.5)
     .slice(0, 4);

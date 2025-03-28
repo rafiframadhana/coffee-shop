@@ -30,7 +30,7 @@ export default function WhyUs() {
 
   const featureDetail = features.map((feature) => {
     return (
-      <div className="feature-item">
+      <div className="feature-item" key={feature.title}>
         <img src={feature.img} alt={feature.title} />
         <h3>{feature.title}</h3>
         <p>{feature.text}</p>

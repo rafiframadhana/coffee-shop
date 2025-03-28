@@ -34,8 +34,8 @@ export default function CheckoutDetails({ calculateTotal, handleSubmit }) {
         ></textarea>
 
         <label>Payment Method:</label>
-        <select required>
-          <option value="" disabled selected>
+        <select required defaultValue="">
+          <option value="" disabled>
             Select Payment Method
           </option>
           <option value="qris">QRIS</option>

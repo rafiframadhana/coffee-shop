@@ -31,6 +31,8 @@ export default function TransitionsModal({
   handleClose,
   title,
   message,
+  closeButton,
+  showButton,
 }) {
   return (
     <Modal
@@ -54,24 +56,26 @@ export default function TransitionsModal({
           <Typography id="transition-modal-description" sx={{ mt: 2 }}>
             {message}
           </Typography>
-          <Button
-            onClick={handleClose}
-            sx={{
-              mt: 3,
-              backgroundColor: "#C89F85",
-              color: "#2C1A15",
-              fontWeight: "bold",
-              borderRadius: "8px",
-              padding: "8px 16px",
-              textTransform: "none",
-              "&:hover": {
-                backgroundColor: "#B38B6D",
-              },
-            }}
-            variant="contained"
-          >
-            Close
-          </Button>
+          {showButton && (
+            <Button
+              onClick={handleClose}
+              sx={{
+                mt: 3,
+                backgroundColor: "#C89F85",
+                color: "#2C1A15",
+                fontWeight: "bold",
+                borderRadius: "8px",
+                padding: "8px 16px",
+                textTransform: "none",
+                "&:hover": {
+                  backgroundColor: "#B38B6D",
+                },
+              }}
+              variant="contained"
+            >
+              {closeButton}
+            </Button>
+          )}
         </Box>
       </Fade>
     </Modal>

@@ -1,5 +1,6 @@
 import { useCart } from "../../context/CartContext";
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import "./../../styles/Checkout.css";
 import TransitionsModal from "./../../components/TransitionsModal.jsx";
 import Cart from "./Cart";
@@ -12,6 +13,9 @@ export default function CheckoutPage() {
   const [modalOpen, setModalOpen] = useState(false);
   const [modalTitle, setModalTitle] = useState("");
   const [modalMessage, setModalMessage] = useState("");
+  const [buttonText, setButtonText] = useState("");
+  const [showButton, setShowButton] = useState(true);
+  const navigate = useNavigate();
 
   useEffect(() => {
     localStorage.setItem("cart", JSON.stringify(cart));
@@ -26,14 +30,35 @@ export default function CheckoutPage() {
       setModalMessage(
         "Your cart is empty. Please add items before placing an order."
       );
+      setButtonText("Close");
+      setShowButton(true);
     } else {
       setModalTitle("Order Placed");
-      setModalMessage("Your order has been placed successfully!");
+      setModalMessage(
+        <>
+          <span className="checkout-modal-title">
+            Your order has been placed successfully!
+          </span>
+          <span className="checkout-modal-desc">
+            You will be redirected to Homepage...
+          </span>
+        </>
+      );
+      setShowButton(false);
 
       localStorage.removeItem("cart");
       localStorage.removeItem("totalPrice");
       clearCart();
+
+      setTimeout(() => {
+        navigate("/");
+      }, 3000);
     }
+
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
 
     setModalOpen(true);
   };
@@ -53,6 +78,8 @@ export default function CheckoutPage() {
       setModalMessage(
         "You can only order up to 100 items per product. If you wish to place a bulk order, please contact us through the Contact section."
       );
+      setButtonText("Close");
+      setShowButton(true);
       setModalOpen(true);
       return;
     }
@@ -81,6 +108,8 @@ export default function CheckoutPage() {
         handleClose={() => setModalOpen(false)}
         title={modalTitle}
         message={modalMessage}
+        closeButton={buttonText}
+        showButton={showButton}
       />
     </div>
   );

@@ -181,6 +181,28 @@ body.modal-open {
   background-color: #e0a65f;
 }
 
+.checkout-modal-title {
+  margin: 0;
+  font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+  font-weight: 600;
+  font-size: 1.2rem;
+  line-height: 1.5;
+  letter-spacing: 0.00938em;
+  margin-top: 16px;
+  display: block;
+  margin-bottom: 20px;
+}
+
+.checkout-modal-desc {
+  margin: 0;
+  font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+  font-weight: 400;
+  font-size: 1rem;
+  line-height: 1.5;
+  letter-spacing: 0.00938em;
+  margin-top: 16px;
+}
+
 @media screen and (max-width: 480px) {
   .checkout-container {
     flex-direction: column;

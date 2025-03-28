@@ -1,15 +1,34 @@
-import { products } from "./../../data/data.js";
 import ScrollToTop from "./../../components/ScrollToTop.jsx";
 import "./../../styles/Products.css";
 import { useCart } from "../../context/CartContext.jsx";
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import checkmark from "./../../assets/checkmark.png";
+import { useProducts } from "../../context/ProductContext.jsx";
 
 export default function Product() {
+  const { products, loading, error } = useProducts();
   const { addToCart } = useCart();
   const [quantities, setQuantities] = useState({});
   const [addedMessage, setAddedMessage] = useState({});
+
+  if (loading) {
+    return (
+      <div className="spinner-container">
+        <div className="spinner"></div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="error-message">
+        <div className="error-box">
+          <span className="error-icon">⚠️</span> {error}
+        </div>
+      </div>
+    );
+  }
 
   function handleSelectQuantity(event, productId) {
     setQuantities((prevQuantities) => ({

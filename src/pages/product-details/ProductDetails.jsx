@@ -1,16 +1,35 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { useParams } from "react-router-dom";
-import { products } from "./../../data/data.js";
+import { useProducts } from "../../context/ProductContext.jsx";
 import { useCart } from "../../context/CartContext.jsx";
 import "./../../styles/ProductDetails.css";
 import checkmark from "./../../assets/checkmark.png";
 
 export default function ProductDetails() {
+  const { products, loading, error } = useProducts();
   const { productId } = useParams();
   const product = products.find((p) => p.id === parseInt(productId));
   const { addToCart } = useCart();
   const [quantity, setQuantity] = useState(1);
   const [addedMessage, setAddedMessage] = useState("");
+
+  if (loading) {
+    return (
+      <div className="spinner-container">
+        <div className="spinner"></div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="error-message">
+        <div className="error-box">
+          <span className="error-icon">⚠️</span> {error}
+        </div>
+      </div>
+    );
+  }
 
   if (!product) {
     return <div>Product not found</div>;
