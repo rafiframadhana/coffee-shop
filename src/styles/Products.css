@@ -39,6 +39,11 @@
   padding: 20px;
   border-radius: 8px;
   box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+}
+
+.products-item:hover{
+  transform: translateY(-5px);
 }
 
 .products-item img {
@@ -75,10 +80,12 @@
   transition: all 0.3s ease;
   border: none;
   cursor: pointer;
+  transition: all 0.3s ease;
 }
 
 .products-btn:hover {
   background: #e0a65f;
+  transform: scale(1.05);
 }
 
 .quantity-select {

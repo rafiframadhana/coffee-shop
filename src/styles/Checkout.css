@@ -173,12 +173,13 @@ body.modal-open {
   font-size: 16px;
   font-weight: bold;
   cursor: pointer;
-  transition: background 0.3s ease-in-out;
+  transition: all 0.3s ease;
   margin-top: 20px;
 }
 
 .checkout-form button:hover {
   background-color: #e0a65f;
+  transform: scale(1.05);
 }
 
 .checkout-modal-title {

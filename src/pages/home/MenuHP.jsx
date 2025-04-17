@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 import { useProducts } from "../../context/ProductContext";
 
 export default function MenuHP() {
-  const {products, loading, error} = useProducts()
+  const { products, loading, error } = useProducts();
 
   if (loading) {
     return (
@@ -29,9 +29,11 @@ export default function MenuHP() {
   const listOfMenu = randomProducts.map((product) => {
     return (
       <div className="menu-item" key={product.id}>
-        <img src={product.src} alt={product.name} />
-        <h3>{product.name}</h3>
-        <p>{product.contain}</p>
+        <Link to={`/product/${product.id}`} className="menu-link">
+          <img src={product.src} alt={product.name} />
+          <h3>{product.name}</h3>
+          <p>{product.contain}</p>
+        </Link>
         <Link to="/products" className="btn menu-btn">
           Order Now
         </Link>
