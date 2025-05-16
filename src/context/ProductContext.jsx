@@ -12,7 +12,7 @@ export const ProductsProvider = ({ children }) => {
       setLoading(true);
       try {
         const res = await fetch(
-          "https://coffee-api-production-8bb9.up.railway.app/api/coffee"
+          "https://coffeeshop-backend.up.railway.app/api/coffee"
         );
         const data = await res.json();
         setProducts(data);

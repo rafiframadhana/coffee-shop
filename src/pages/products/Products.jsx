@@ -55,8 +55,8 @@ export default function Product() {
     return (
       <div className="products-item" key={product.id}>
         <Link to={`/product/${product.id}`} className="product-link">
-          <img src={product.src} alt={product.name} />
-          <h3>{product.name}</h3>
+          <img src={product.src} alt={product.item} />
+          <h3>{product.item}</h3>
           <p>{product.contain}</p>
         </Link>
         <div className="flex-box">
