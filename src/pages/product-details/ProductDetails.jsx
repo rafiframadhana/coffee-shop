@@ -1,17 +1,35 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { useProducts } from "../../context/ProductContext.jsx";
 import { useCart } from "../../context/CartContext.jsx";
 import "./../../styles/ProductDetails.css";
 import checkmark from "./../../assets/checkmark.png";
 
 export default function ProductDetails() {
-  const { products, loading, error } = useProducts();
+  const [product, setProduct] = useState(null)
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState(null)
   const { productId } = useParams();
-  const product = products.find((p) => p.id === parseInt(productId));
   const { addToCart } = useCart();
   const [quantity, setQuantity] = useState(1);
   const [addedMessage, setAddedMessage] = useState("");
+
+  useEffect(() => {
+    const fetchProductById = async () => {
+      try {
+        const response = await fetch(
+          `https://coffeeshop-backend.up.railway.app/api/coffee/${productId}`
+        );
+        const data = await response.json();
+        setProduct(data)
+      } catch (error) {
+        console.error("Error fetching data:", error);
+        setError("Failed to load products");
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchProductById();
+  }, [productId]);
 
   if (loading) {
     return (
@@ -51,11 +69,11 @@ export default function ProductDetails() {
   return (
     <div className="product-details">
       <div className="left-column">
-        <img src={product.src} alt={product.name} />
+        <img src={product.src} alt={product.item} />
       </div>
 
       <div className="right-column">
-        <h2>{product.name}</h2>
+        <h2>{product.item}</h2>
         <p>{product.contain}</p>
         <p className="price">
           <strong>

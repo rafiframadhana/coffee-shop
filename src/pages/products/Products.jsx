@@ -53,8 +53,8 @@ export default function Product() {
 
   const listOfProduct = products.map((product) => {
     return (
-      <div className="products-item" key={product.id}>
-        <Link to={`/product/${product.id}`} className="product-link">
+      <div className="products-item" key={product._id}>
+        <Link to={`/product/${product._id}`} className="product-link">
           <img src={product.src} alt={product.item} />
           <h3>{product.item}</h3>
           <p>{product.contain}</p>
@@ -65,8 +65,8 @@ export default function Product() {
           </p>
           <select
             className="quantity-select"
-            value={quantities[product.id] || 1}
-            onChange={(e) => handleSelectQuantity(e, product.id)}
+            value={quantities[product._id] || 1}
+            onChange={(e) => handleSelectQuantity(e, product._id)}
           >
             <option value={1}>1</option>
             <option value={2}>2</option>
@@ -85,17 +85,17 @@ export default function Product() {
           <button
             className="products-btn"
             onClick={() => {
-              addToCart(product, quantities[product.id] || 1);
-              addToCartMessage(product.id);
+              addToCart(product, quantities[product._id] || 1);
+              addToCartMessage(product._id);
             }}
           >
             Add To Cart
           </button>
 
-          {addedMessage[product.id] && (
+          {addedMessage[product._id] && (
             <div className="added-message">
               <img src={checkmark} />
-              <p>{addedMessage[product.id]}</p>
+              <p>{addedMessage[product._id]}</p>
             </div>
           )}
         </div>

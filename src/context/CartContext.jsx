@@ -8,16 +8,19 @@ export const CartProvider = ({ children }) => {
   });
 
   const addToCart = (product, quantity) => {
+    const productWithId = { ...product, id: product._id };
     setCart((prevCart) => {
-      const existingItem = prevCart.find((item) => item.id === product.id);
+      const existingItem = prevCart.find(
+        (item) => item.id === productWithId.id
+      );
       if (existingItem) {
         return prevCart.map((item) =>
-          item.id === product.id
+          item.id === productWithId.id
             ? { ...item, quantity: item.quantity + quantity }
             : item
         );
       } else {
-        return [...prevCart, { ...product, quantity }];
+        return [...prevCart, { ...productWithId, quantity }];
       }
     });
   };

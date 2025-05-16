@@ -28,10 +28,10 @@ export default function MenuHP() {
 
   const listOfMenu = randomProducts.map((product) => {
     return (
-      <div className="menu-item" key={product.id}>
-        <Link to={`/product/${product.id}`} className="menu-link">
-          <img src={product.src} alt={product.name} />
-          <h3>{product.name}</h3>
+      <div className="menu-item" key={product._id}>
+        <Link to={`/product/${product._id}`} className="menu-link">
+          <img src={product.src} alt={product.item} />
+          <h3>{product.item}</h3>
           <p>{product.contain}</p>
         </Link>
         <Link to="/products" className="btn menu-btn">
