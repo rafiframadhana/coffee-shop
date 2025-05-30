@@ -31,37 +31,37 @@ export default function Cart({
     );
   }
 
-
-
   const renderQuantitySection = (item) => {
     return editingItem === item.productId._id ? (
-  <>
-    <p>
-      Qty:
-      <input
-        className="quantity-input"
-        type="number"
-        min="1"
-        value={newQuantity}
-        onChange={(e) => setNewQuantity(Number(e.target.value))}
-      />
-    </p>
-    <p onClick={() => handleSaveClick(item.productId._id)} className="save-btn">
-      Save
-    </p>
-  </>
-) : (
-  <>
-    <p>Qty: {item.quantity}</p>
-    <p
-      onClick={() => handleUpdateClick(item.productId._id, item.quantity)}
-      className="update-btn"
-    >
-      Update
-    </p>
-  </>
-);
-
+      <div key={item.productId._id}>
+        <p>
+          Qty:
+          <input
+            className="quantity-input"
+            type="number"
+            min="1"
+            value={newQuantity}
+            onChange={(e) => setNewQuantity(Number(e.target.value))}
+          />
+        </p>
+        <p
+          onClick={() => handleSaveClick(item.productId._id)}
+          className="save-btn"
+        >
+          Save
+        </p>
+      </div>
+    ) : (
+      <>
+        <p>Qty: {item.quantity}</p>
+        <p
+          onClick={() => handleUpdateClick(item.productId._id, item.quantity)}
+          className="update-btn"
+        >
+          Update
+        </p>
+      </>
+    );
   };
 
   return (
@@ -79,7 +79,10 @@ export default function Cart({
             <h3>{item.productId?.item}</h3>
             <div className="quantity-container">
               {renderQuantitySection(item)}
-              <p className="delete-btn" onClick={() => deleteItem(item.productId._id)}>
+              <p
+                className="delete-btn"
+                onClick={() => deleteItem(item.productId._id)}
+              >
                 Delete
               </p>
             </div>
