@@ -30,8 +30,8 @@ app.use(
     resave: false,
     cookie: {
       maxAge: 1000 * 60 * 60 * 24 * 7, // 1 week
-      sameSite: "none", // allow cross-site cookies
-      secure: process.env.NODE_ENV === "production", // true only in prod with HTTPS
+      sameSite: "none", 
+      secure: process.env.NODE_ENV === "production", 
     },
     store: MongoStore.create({
       client: mongoose.connection.getClient(),
