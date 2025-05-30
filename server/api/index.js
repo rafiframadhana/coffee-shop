@@ -1,5 +1,6 @@
 import express from "express";
 import cors from "cors";
+import cookieParser from "cookie-parser";
 import connectDB from "../src/utils/db.js";
 import session from "express-session";
 import passport from "passport";
@@ -10,16 +11,17 @@ import "./../src/strategies/local-strategy.js";
 import routes from "../src/routes/index.js";
 
 const app = express();
-
 connectDB();
+
+app.use(cookieParser(process.env.SESSION_SECRET));
 
 app.use(
   cors({
     origin: process.env.CORS_ORIGIN || "http://localhost:5173",
     credentials: true,
     methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
-    allowedHeaders: ['Content-Type', 'Authorization'],
-    exposedHeaders: ["set-cookie"]
+    allowedHeaders: ["Content-Type", "Authorization"],
+    exposedHeaders: ["set-cookie"],
   })
 );
 
@@ -34,10 +36,15 @@ app.use(
       maxAge: 1000 * 60 * 60 * 24 * 7, // 1 week
       sameSite: process.env.NODE_ENV === "production" ? "None" : "Lax",
       secure: process.env.NODE_ENV === "production",
-      domain: process.env.NODE_ENV === "production" ? ".vercel.app" : "localhost"
+      domain:
+        process.env.NODE_ENV === "production" ? ".vercel.app" : "localhost",
     },
     store: MongoStore.create({
       client: mongoose.connection.getClient(),
+      dbName: "coffee_shop",
+      collectionName: "sessions",
+      ttl: 60 * 60 * 24 * 7, // 1 week
+      autoRemove: "native",
     }),
   })
 );

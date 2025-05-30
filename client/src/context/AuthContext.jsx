@@ -8,56 +8,75 @@ export function AuthProvider({ children }) {
     const storedUser = localStorage.getItem("user");
     return storedUser ? JSON.parse(storedUser) : null;
   });
+  const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
   const API_URL = import.meta.env.VITE_API_URL;
 
-  useEffect(() => {
-    const checkAuth = async () => {
-      try {
-        const response = await fetch(`${API_URL}/api/auth/check`, {
-          credentials: "include",
-          headers: {
-            Accept: "application/json",
-            "Content-Type": "application/json",
-          },
-        });
+  const checkAuth = async () => {
+    try {
+      const response = await fetch(`${API_URL}/api/auth/check`, {
+        credentials: "include",
+        headers: {
+          "Accept": "application/json",
+          "Content-Type": "application/json",
+        },
+      });
 
-        if (response.ok) {
-          const data = await response.json();
-          if (data?.user) {
-            setUser(data.user);
-            localStorage.setItem("user", JSON.stringify(data.user));
-          } else {
-            setUser(null);
-            localStorage.removeItem("user");
-          }
+      if (response.ok) {
+        const data = await response.json();
+        if (data?.user) {
+          setUser(data.user);
+          localStorage.setItem("user", JSON.stringify(data.user));
         } else {
           setUser(null);
           localStorage.removeItem("user");
         }
-      } catch (err) {
-        console.error("Auth check failed:", err);
+      } else {
         setUser(null);
         localStorage.removeItem("user");
       }
-    };
+    } catch (err) {
+      console.error("Auth check failed:", err);
+      setUser(null);
+      localStorage.removeItem("user");
+    } finally {
+      setLoading(false);
+    }
+  };
 
+  useEffect(() => {
     checkAuth();
   }, []);
 
-  const logout = () => {
-    fetch(`${API_URL}/api/auth/logout`, {
-      method: "POST",
-      credentials: "include",
-    }).finally(() => {
+  const logout = async () => {
+    try {
+      const response = await fetch(`${API_URL}/api/auth/logout`, {
+        method: "POST",
+        credentials: "include",
+        headers: {
+          "Accept": "application/json",
+          "Content-Type": "application/json",
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error('Logout failed');
+      }
+    } catch (error) {
+      console.error('Logout error:', error);
+    } finally {
       setUser(null);
       localStorage.removeItem("user");
-      setTimeout(() => navigate("/"), 500);
-    });
+      navigate("/");
+    }
   };
 
+  if (loading) {
+    return <div>Loading...</div>; // Or your loading component
+  }
+
   return (
-    <AuthContext.Provider value={{ user, setUser, logout }}>
+    <AuthContext.Provider value={{ user, setUser, logout, checkAuth }}>
       {children}
     </AuthContext.Provider>
   );
