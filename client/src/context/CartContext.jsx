@@ -9,6 +9,14 @@ export const CartProvider = ({ children }) => {
     const savedCart = localStorage.getItem("cart");
     return savedCart ? JSON.parse(savedCart) : [];
   });
+  const [localQuantity, setLocalQuantity] = useState(() => {
+    const savedCart = localStorage.getItem("cart");
+    if (savedCart) {
+      const parsedCart = JSON.parse(savedCart);
+      return parsedCart.reduce((total, item) => total + item.quantity, 0);
+    }
+    return 0;
+  });
   const [alert, setAlert] = useState(null);
   const [totalPrice, setTotalPrice] = useState(0);
   const [loading, setLoading] = useState(true);
@@ -60,6 +68,7 @@ export const CartProvider = ({ children }) => {
     }
 
     try {
+      setLocalQuantity((prev) => prev + quantity);
       const updatedCart = [...cart];
       const existingItemIndex = updatedCart.findIndex(
         (item) => (item.productId._id || item.productId) === product._id
@@ -81,7 +90,10 @@ export const CartProvider = ({ children }) => {
         body: JSON.stringify({ items: updatedCart }),
       });
 
-      if (!response.ok) throw new Error("Failed to update cart");
+      if (!response.ok) {
+        setLocalQuantity((prev) => prev - quantity);
+        throw new Error("Failed to update cart");
+      }
 
       await fetchCart();
       const data = await response.json();
@@ -100,22 +112,37 @@ export const CartProvider = ({ children }) => {
   };
 
   const deleteItem = async (id) => {
+    const itemToDelete = cart.find(
+      (item) => (item.productId._id || item.productId) === id
+    );
+    if (itemToDelete) {
+      setLocalQuantity((prev) => prev - itemToDelete.quantity);
+    }
     const updatedCart = cart.filter(
       (item) => (item.productId._id || item.productId) !== id
     );
     setCart(updatedCart);
 
     try {
-      await fetch(`${API_URL}/api/cart/item/${id}`, {
+      const response = await fetch(`${API_URL}/api/cart/item/${id}`, {
         method: "DELETE",
         credentials: "include",
       });
+
+      if (!response.ok) {
+        setLocalQuantity((prev) => prev + (itemToDelete?.quantity || 0));
+        throw new Error("Failed to delete item");
+      }
     } catch (err) {
       console.error("Failed to delete item:", err);
     }
   };
 
   const updateQuantity = async (productId, newQuantity) => {
+    const item = cart.find((item) => item.productId._id === productId);
+    const oldQuantity = item?.quantity || 0;
+    setLocalQuantity((prev) => prev - oldQuantity + newQuantity);
+
     const updatedCart = cart.map((item) =>
       item.productId._id === productId
         ? { ...item, quantity: newQuantity }
@@ -125,25 +152,35 @@ export const CartProvider = ({ children }) => {
     setCart(updatedCart);
 
     try {
-      await fetch(`${API_URL}/api/cart/item/${productId}`, {
+      const response = await fetch(`${API_URL}/api/cart/item/${productId}`, {
         method: "PATCH",
         credentials: "include",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ quantity: newQuantity }),
       });
+
+      if (!response.ok) {
+        setLocalQuantity((prev) => prev - newQuantity + oldQuantity);
+        throw new Error("Failed to update quantity");
+      }
     } catch (err) {
       console.error("Failed to update quantity:", err);
     }
   };
 
   const clearCart = async () => {
+    setLocalQuantity(0);
     setCart([]);
 
     try {
-      await fetch(`${API_URL}/api/cart`, {
+      const response = await fetch(`${API_URL}/api/cart`, {
         method: "DELETE",
         credentials: "include",
       });
+
+      if (!response.ok) {
+        throw new Error("Failed to clear cart");
+      }
     } catch (err) {
       console.error("Failed to clear cart:", err);
     }
@@ -162,6 +199,7 @@ export const CartProvider = ({ children }) => {
         loading,
         error,
         fetchCart,
+        localQuantity,
       }}
     >
       {children}

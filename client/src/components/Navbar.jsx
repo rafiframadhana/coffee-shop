@@ -13,8 +13,8 @@ export default function Navbar() {
   const [isMobile, setIsMobile] = useState(window.innerWidth < 1224);
   const [menuOpen, setMenuOpen] = useState(false);
   const { user, logout } = useAuth();
-  const { cart } = useCart();
-  const itemQuantity = cart.reduce((total, item) => total + item.quantity, 0);
+  const { cart, localQuantity } = useCart();
+  // const itemQuantity = cart.reduce((total, item) => total + item.quantity, 0);
   const location = useLocation();
   const isHome = location.pathname === "/";
 
@@ -108,11 +108,11 @@ export default function Navbar() {
                     src={isHome ? cartWhite : cartBlack}
                     alt="cart"
                   />
-                  {itemQuantity > 0 && (
+                  {localQuantity > 0 && (
                     <span
                       className={`cart-span ${isHome ? "home" : "not-home"}`}
                     >
-                      {itemQuantity}
+                      {localQuantity}
                     </span>
                   )}
                 </Link>

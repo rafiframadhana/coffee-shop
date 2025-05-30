@@ -17,7 +17,7 @@ export function AuthProvider({ children }) {
       const response = await fetch(`${API_URL}/api/auth/check`, {
         credentials: "include",
         headers: {
-          "Accept": "application/json",
+          Accept: "application/json",
           "Content-Type": "application/json",
         },
       });
@@ -30,12 +30,10 @@ export function AuthProvider({ children }) {
       } else if (response.status === 401) {
         setUser(null);
         localStorage.removeItem("user");
-        console.log("still error")
+        console.log("still error");
       }
-      // If it's not 401, keep the existing user state
     } catch (err) {
       console.error("Auth check failed:", err);
-      // On network error, keep the existing user state from localStorage
       const storedUser = localStorage.getItem("user");
       if (storedUser) {
         setUser(JSON.parse(storedUser));
@@ -46,13 +44,8 @@ export function AuthProvider({ children }) {
   };
 
   useEffect(() => {
-    // Initial auth check
     checkAuth();
-
-    // Set up periodic auth check (every 5 minutes)
     const intervalId = setInterval(checkAuth, 5 * 60 * 1000);
-
-    // Cleanup interval on component unmount
     return () => clearInterval(intervalId);
   }, []);
 
@@ -80,9 +73,12 @@ export function AuthProvider({ children }) {
   };
 
   if (loading) {
-    return <div>Loading...</div>; // Or your loading component
+    return (
+      <div className="spinner-container">
+        <div className="spinner"></div>
+      </div>
+    );
   }
-
   return (
     <AuthContext.Provider value={{ user, setUser, logout, checkAuth }}>
       {children}
