@@ -76,6 +76,7 @@ function EditProduct() {
         `${API_URL}/api/coffee/${selectedProduct._id}`,
         {
           method: "PATCH",
+          credentials: "include",
           headers: {
             "Content-Type": "application/json",
           },
@@ -114,6 +115,7 @@ function EditProduct() {
     try {
       const response = await fetch(`${API_URL}/api/coffee/${id}`, {
         method: "DELETE",
+        credentials: "include",
       });
 
       if (!response.ok) {

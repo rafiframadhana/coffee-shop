@@ -50,6 +50,7 @@ export default function AddProduct() {
         `${API_URL}/api/coffee`,
         {
           method: "POST",
+          credentials: "include",
           headers: {
             "Content-Type": "application/json",
           },

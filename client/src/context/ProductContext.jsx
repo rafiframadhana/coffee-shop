@@ -12,9 +12,9 @@ export const ProductsProvider = ({ children }) => {
     const fetchProducts = async () => {
       setLoading(true);
       try {
-        const res = await fetch(
-          `${API_URL}/api/coffee`
-        );
+        const res = await fetch(`${API_URL}/api/coffee`, {
+          credentials: "include",
+        });
         const data = await res.json();
         setProducts(data);
       } catch (error) {

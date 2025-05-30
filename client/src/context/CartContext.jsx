@@ -127,8 +127,8 @@ export const CartProvider = ({ children }) => {
     try {
       await fetch(`${API_URL}/api/cart/item/${productId}`, {
         method: "PATCH",
-        headers: { "Content-Type": "application/json" },
         credentials: "include",
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ quantity: newQuantity }),
       });
     } catch (err) {

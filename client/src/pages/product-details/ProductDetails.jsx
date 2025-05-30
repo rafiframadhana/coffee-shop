@@ -19,7 +19,9 @@ export default function ProductDetails() {
   useEffect(() => {
     const fetchProductById = async () => {
       try {
-        const response = await fetch(`${API_URL}/api/coffee/${productId}`);
+        const response = await fetch(`${API_URL}/api/coffee/${productId}`, {
+          credentials: "include",
+        });
         const data = await response.json();
         setProduct(data);
       } catch (error) {
