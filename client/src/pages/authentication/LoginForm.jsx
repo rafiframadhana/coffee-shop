@@ -80,14 +80,16 @@ export default function LoginForm() {
 
       if (response.ok) {
         const result = await response.json();
-        setSuccessMessage("Login Succesfully!");
-        localStorage.setItem("user", JSON.stringify(result.user));
+        setSuccessMessage("Login Successfully!");
+        // Set user first before redirecting
         setUser(result.user);
+        localStorage.setItem("user", JSON.stringify(result.user));
         setFormData({
           username: "",
           password: "",
         });
-        setTimeout(() => navigate("/"));
+        // Add a small delay before navigation to ensure state is set
+        setTimeout(() => navigate("/"), 100);
       } else {
         const errorJson = await response.json().catch(() => ({}));
         setFormErrors({
@@ -137,7 +139,11 @@ export default function LoginForm() {
                 onClick={togglePasswordVisibility}
                 aria-label="Toggle password visibility"
               >
-                {showPassword ? <VisibilityOffIcon fontSize="small" /> : <VisibilityIcon fontSize="small"/>}
+                {showPassword ? (
+                  <VisibilityOffIcon fontSize="small" />
+                ) : (
+                  <VisibilityIcon fontSize="small" />
+                )}
               </button>
             </div>
             {formErrors.password && (

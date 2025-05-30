@@ -13,36 +13,38 @@ export function AuthProvider({ children }) {
   const API_URL = import.meta.env.VITE_API_URL;
 
   const checkAuth = async () => {
-    try {
-      const response = await fetch(`${API_URL}/api/auth/check`, {
-        credentials: "include",
-        headers: {
-          "Accept": "application/json",
-          "Content-Type": "application/json",
-        },
-      });
+  try {
+    const response = await fetch(`${API_URL}/api/auth/check`, {
+      credentials: "include",
+      headers: {
+        "Accept": "application/json",
+        "Content-Type": "application/json",
+      },
+    });
 
-      if (response.ok) {
-        const data = await response.json();
-        if (data?.user) {
-          setUser(data.user);
-          localStorage.setItem("user", JSON.stringify(data.user));
-        } else {
-          setUser(null);
-          localStorage.removeItem("user");
-        }
+    if (response.ok) {
+      const data = await response.json();
+      if (data?.user) {
+        setUser(data.user);
+        localStorage.setItem("user", JSON.stringify(data.user));
       } else {
         setUser(null);
         localStorage.removeItem("user");
       }
-    } catch (err) {
-      console.error("Auth check failed:", err);
-      setUser(null);
-      localStorage.removeItem("user");
-    } finally {
-      setLoading(false);
+    } else {
+      // Only clear user if we get an explicit unauthorized response
+      if (response.status === 401) {
+        setUser(null);
+        localStorage.removeItem("user");
+      }
     }
-  };
+  } catch (err) {
+    console.error("Auth check failed:", err);
+    // Don't clear user on network errors
+  } finally {
+    setLoading(false);
+  }
+};
 
   useEffect(() => {
     checkAuth();
