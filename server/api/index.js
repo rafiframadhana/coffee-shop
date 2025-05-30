@@ -15,15 +15,13 @@ connectDB();
 
 app.use(cookieParser());
 
-app.use(
-  cors({
-    origin: [process.env.CORS_ORIGIN, "http://localhost:5173"],
-    credentials: true,
-    methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
-    allowedHeaders: ["Content-Type", "Authorization"],
-    exposedHeaders: ["set-cookie"],
-  })
-);
+app.use(cors({
+  origin: [process.env.CORS_ORIGIN, "https://coffeeculture-id.netlify.app"],
+  credentials: true,
+  methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
+  allowedHeaders: ["Content-Type", "Authorization"],
+  exposedHeaders: ["set-cookie"]
+}));
 
 app.use(express.json());
 
@@ -34,16 +32,16 @@ app.use(
     resave: false,
     cookie: {
       maxAge: 1000 * 60 * 60 * 24 * 7, // 1 week
-      sameSite: process.env.NODE_ENV === "production" ? "None" : "Lax",
-      secure: process.env.NODE_ENV === "production",
+      sameSite: 'None', // Required for cross-site cookies
+      secure: true, // Required for production
+      domain: '.vercel.app' // Add your domain
     },
     store: MongoStore.create({
       client: mongoose.connection.getClient(),
       dbName: "coffee_shop",
       collectionName: "sessions",
-      ttl: 60 * 60 * 24 * 7, // 1 week
-      autoRemove: "native",
-    }),
+      ttl: 60 * 60 * 24 * 7
+    })
   })
 );
 

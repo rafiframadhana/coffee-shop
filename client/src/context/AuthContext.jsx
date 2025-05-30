@@ -17,7 +17,7 @@ export function AuthProvider({ children }) {
       const response = await fetch(`${API_URL}/api/auth/check`, {
         credentials: "include",
         headers: {
-          Accept: "application/json",
+          "Accept": "application/json",
           "Content-Type": "application/json",
         },
       });
@@ -28,8 +28,8 @@ export function AuthProvider({ children }) {
         setUser(data.user);
         localStorage.setItem("user", JSON.stringify(data.user));
       } else if (response.status === 401) {
-        // setUser(null);
-        // localStorage.removeItem("user");
+        setUser(null);
+        localStorage.removeItem("user");
         console.log("still error")
       }
       // If it's not 401, keep the existing user state
