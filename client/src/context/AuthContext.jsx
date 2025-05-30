@@ -30,7 +30,6 @@ export function AuthProvider({ children }) {
       } else if (response.status === 401) {
         setUser(null);
         localStorage.removeItem("user");
-        console.log("still error");
       }
     } catch (err) {
       console.error("Auth check failed:", err);
