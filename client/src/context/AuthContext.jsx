@@ -13,41 +13,47 @@ export function AuthProvider({ children }) {
   const API_URL = import.meta.env.VITE_API_URL;
 
   const checkAuth = async () => {
-  try {
-    const response = await fetch(`${API_URL}/api/auth/check`, {
-      credentials: "include",
-      headers: {
-        "Accept": "application/json",
-        "Content-Type": "application/json",
-      },
-    });
+    try {
+      const response = await fetch(`${API_URL}/api/auth/check`, {
+        credentials: "include",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+      });
 
-    if (response.ok) {
       const data = await response.json();
-      if (data?.user) {
+
+      if (response.ok && data?.user) {
         setUser(data.user);
         localStorage.setItem("user", JSON.stringify(data.user));
-      } else {
+      } else if (response.status === 401) {
+        // Only clear on explicit 401 unauthorized
         setUser(null);
         localStorage.removeItem("user");
       }
-    } else {
-      // Only clear user if we get an explicit unauthorized response
-      if (response.status === 401) {
-        setUser(null);
-        localStorage.removeItem("user");
+      // If it's not 401, keep the existing user state
+    } catch (err) {
+      console.error("Auth check failed:", err);
+      // On network error, keep the existing user state from localStorage
+      const storedUser = localStorage.getItem("user");
+      if (storedUser) {
+        setUser(JSON.parse(storedUser));
       }
+    } finally {
+      setLoading(false);
     }
-  } catch (err) {
-    console.error("Auth check failed:", err);
-    // Don't clear user on network errors
-  } finally {
-    setLoading(false);
-  }
-};
+  };
 
   useEffect(() => {
+    // Initial auth check
     checkAuth();
+
+    // Set up periodic auth check (every 5 minutes)
+    const intervalId = setInterval(checkAuth, 5 * 60 * 1000);
+
+    // Cleanup interval on component unmount
+    return () => clearInterval(intervalId);
   }, []);
 
   const logout = async () => {
@@ -56,16 +62,16 @@ export function AuthProvider({ children }) {
         method: "POST",
         credentials: "include",
         headers: {
-          "Accept": "application/json",
+          Accept: "application/json",
           "Content-Type": "application/json",
         },
       });
 
       if (!response.ok) {
-        throw new Error('Logout failed');
+        throw new Error("Logout failed");
       }
     } catch (error) {
-      console.error('Logout error:', error);
+      console.error("Logout error:", error);
     } finally {
       setUser(null);
       localStorage.removeItem("user");
