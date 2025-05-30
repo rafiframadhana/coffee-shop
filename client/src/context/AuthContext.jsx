@@ -28,9 +28,9 @@ export function AuthProvider({ children }) {
         setUser(data.user);
         localStorage.setItem("user", JSON.stringify(data.user));
       } else if (response.status === 401) {
-        // Only clear on explicit 401 unauthorized
-        setUser(null);
-        localStorage.removeItem("user");
+        // setUser(null);
+        // localStorage.removeItem("user");
+        console.log("still error")
       }
       // If it's not 401, keep the existing user state
     } catch (err) {
