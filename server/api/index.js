@@ -32,9 +32,9 @@ app.use(
     resave: false,
     cookie: {
       maxAge: 1000 * 60 * 60 * 24 * 7, // 1 week
-      sameSite: 'None', // Required for cross-site cookies
-      secure: true, // Required for production
-      domain: '.vercel.app' // Add your domain
+      sameSite: 'none',
+      secure: true,
+      httpOnly: true,
     },
     store: MongoStore.create({
       client: mongoose.connection.getClient(),
