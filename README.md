@@ -16,12 +16,19 @@ Welcome to **Coffee Culture**! This is an e-commerce website for coffee lovers, 
 
 - 📖 **About Section** – Learn more about Coffee Culture and its passion for quality coffee
 
+- 🗝️ **User Authentication** – Secure login, signup, and logout system for users
+
+- 📝 **Admin Page** – Manage products, view orders, and oversee site activity
+
+- 🙍‍♂️ **User Profile** – View and update personal info, order history, and wishlist (Under Development)
+
 ## 🛠️ Tech Stack
 
-- **Frontend:** React, Vite, JavaScript, HTML
+- **Frontend:** React, Vite
+- **Backend:** Node.js, Express.js
+- **Database:** MongoDB
 - **Styling:** MUI (Material-UI), CSS 
-- **Routing:** React Router
-- **Deployment:** Netlify
+- **Deployment:** Vercel, Netlify
 
 ## 🚀 Installation & Setup
 
@@ -36,7 +43,8 @@ Ensure you have **Node.js** and **npm** installed.
 git clone https://github.com/rafiframadhana/coffee-shop.git
 
 # Navigate to the project folder
-cd coffee-shop
+- For frontend: cd client
+- For Backend: cd server
 
 # Install dependencies
 npm install
