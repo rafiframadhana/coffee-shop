@@ -1,0 +1,185 @@
+.user-profile-page {
+  width: 100%;
+  padding: 40px;
+  background-color: #f9f9f9;
+  box-sizing: border-box;
+  font-family: 'Segoe UI', sans-serif;
+  margin-top: 90px;
+}
+
+.user-profile-wrapper {
+  display: flex;
+  max-width: 1200px;
+  margin: 0 auto;
+  background-color: #fff;
+  border-radius: 12px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.06);
+  overflow: hidden;
+}
+
+.user-left {
+  flex: 1;
+  min-width: 250px;
+  max-width: 300px;
+  background-color: #e9eff5;
+  padding: 40px 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border-right: 1px solid #ddd;
+}
+
+.user-avatar-large {
+  width: 160px;
+  height: 160px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-bottom: 30px;
+  border: 4px solid #fff;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.btn-profile {
+  padding: 10px 24px;
+  margin-top: 15px;
+  width: 70%;
+  font-weight: 600;
+  font-size: 15px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+  display: inline-block;
+  text-align: center;
+  letter-spacing: 0.3px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04);
+  border: 1px solid transparent;
+}
+
+.icon-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px; /* space between icon and text */
+}
+
+.icon {
+  font-size: 16px;
+  vertical-align: middle;
+}
+
+
+.btn-profile.primary {
+  background-color: #2563eb; /* modern blue */
+  color: #ffffff;
+  border: 1px solid #2563eb;
+}
+
+.btn-profile.primary:hover {
+  background-color: #1e40af;
+  border-color: #1e40af;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+}
+
+.btn-profile.danger {
+  background-color: #ef4444; /* modern red */
+  color: #ffffff;
+  border: 1px solid #ef4444;
+}
+
+.btn-profile.danger:hover {
+  background-color: #b91c1c;
+  border-color: #b91c1c;
+  box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.15);
+}
+
+
+.user-right {
+  flex: 2;
+  padding: 40px;
+}
+
+.user-info-section h2 {
+  margin: 0;
+  font-size: 28px;
+}
+
+.user-info-section .muted {
+  color: #777;
+  margin: 4px 0;
+}
+
+.role-tag {
+  margin-top: 10px;
+  display: inline-block;
+  background-color: #eef2f7;
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-size: 14px;
+  color: #555;
+}
+
+.divider {
+  height: 1px;
+  background-color: #eee;
+  margin: 30px 0;
+}
+
+.user-stats-section {
+  display: flex;
+  gap: 40px;
+  flex-wrap: wrap;
+}
+
+.stat-box {
+  flex: 1;
+  min-width: 100px;
+  text-align: center;
+}
+
+.stat-box h4 {
+  font-size: 24px;
+  color: #222;
+  margin-bottom: 5px;
+}
+
+.stat-box p {
+  color: #888;
+}
+
+.settings-section h3 {
+  margin-bottom: 15px;
+}
+
+.settings-section ul {
+  list-style: none;
+  padding: 0;
+}
+
+.settings-section li {
+  padding: 8px 0;
+  color: #555;
+  cursor: pointer;
+  border-bottom: 1px solid #eee;
+  transition: color 0.2s ease;
+}
+
+.settings-section li:hover {
+  color: #0077cc;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .user-profile-wrapper {
+    flex-direction: column;
+  }
+
+  .user-left {
+    border-right: none;
+    border-bottom: 1px solid #ddd;
+  }
+
+  .user-stats-section {
+    flex-direction: column;
+    gap: 20px;
+  }
+}
