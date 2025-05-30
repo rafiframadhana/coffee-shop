@@ -43,7 +43,7 @@ Ensure you have **Node.js** and **npm** installed.
 git clone https://github.com/rafiframadhana/coffee-shop.git
 
 # Navigate to the project folder
-- For frontend: cd client
+- For Frontend: cd client
 - For Backend: cd server
 
 # Install dependencies
