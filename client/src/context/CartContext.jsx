@@ -83,6 +83,7 @@ export const CartProvider = ({ children }) => {
 
       if (!response.ok) throw new Error("Failed to update cart");
 
+      await fetchCart();
       const data = await response.json();
 
       setCart(

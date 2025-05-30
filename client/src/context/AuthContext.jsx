@@ -12,20 +12,37 @@ export function AuthProvider({ children }) {
   const API_URL = import.meta.env.VITE_API_URL;
 
   useEffect(() => {
-    fetch(`${API_URL}/api/auth/check`, {
-      credentials: "include",
-    })
-      .then((res) => (res.ok ? res.json() : null))
-      .then((data) => {
-        if (data?.user) {
-          setUser(data.user);
+    const checkAuth = async () => {
+      try {
+        const response = await fetch(`${API_URL}/api/auth/check`, {
+          credentials: "include",
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+          },
+        });
+
+        if (response.ok) {
+          const data = await response.json();
+          if (data?.user) {
+            setUser(data.user);
+            localStorage.setItem("user", JSON.stringify(data.user));
+          } else {
+            setUser(null);
+            localStorage.removeItem("user");
+          }
         } else {
+          setUser(null);
           localStorage.removeItem("user");
         }
-      })
-      .catch((err) => {
+      } catch (err) {
         console.error("Auth check failed:", err);
-      });
+        setUser(null);
+        localStorage.removeItem("user");
+      }
+    };
+
+    checkAuth();
   }, []);
 
   const logout = () => {
