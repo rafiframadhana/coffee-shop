@@ -2,7 +2,7 @@
 
 Welcome to **Coffee Culture**! This is an e-commerce website for coffee lovers, offering a seamless shopping experience with a modern UI built using **MERN Stack**.
 
-![Coffee Shop Interface](https://rafiframadhana.site/assets/founder-hub-MNH2k0ZC.png)
+![Coffee Shop Interface](https://rafiframadhana.site/assets/coffee-culture-KgYMnSdD.png)
 
 ## 🌍 Live Demo
 
