@@ -255,11 +255,11 @@ footer * {
   .nav-menu.not-logged-in.home,
   .nav-menu.not-logged-in.not-home {
     margin-left: 0;
-    margin-top: 35px;
+    margin-top: 10px;
   }
 
   .nav-menu li {
-    margin: 0 15px;
+    margin: 15px;
   }
 
   .btn {
@@ -285,6 +285,13 @@ footer * {
   .navbar {
     padding: 30px 30px;
     align-items: center;
+  }
+
+  .nav-menu.logged-in.home,
+  .nav-menu.logged-in.not-home,
+  .nav-menu.not-logged-in.home,
+  .nav-menu.not-logged-in.not-home {
+    margin-top: 35px;
   }
 
   .nav-menu {
@@ -337,6 +344,13 @@ footer * {
 
   .brand-name {
     font-size: 20px;
+  }
+
+  .nav-menu.logged-in.home,
+  .nav-menu.logged-in.not-home,
+  .nav-menu.not-logged-in.home,
+  .nav-menu.not-logged-in.not-home {
+    margin-top: 15px;
   }
 
   .nav-menu {
@@ -424,7 +438,11 @@ footer * {
 
 @media screen and (max-width: 480px) {
   .hamburger {
-    top: 25.5px;
+    top: 20px;
+  }
+
+  .hamburger.logged-in{
+    top:25.5px
   }
 }
 

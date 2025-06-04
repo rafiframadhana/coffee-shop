@@ -39,7 +39,7 @@ export default function Navbar() {
         </Link>
 
         {/* Hamburger */}
-        <div className="hamburger" onClick={() => setMenuOpen(!menuOpen)}>
+        <div className={`hamburger ${user && "logged-in"}`} onClick={() => setMenuOpen(!menuOpen)}>
           {menuOpen ? (
             <CloseIcon
               sx={{ color: isHome ? "white" : "black" }}

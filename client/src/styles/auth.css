@@ -269,8 +269,9 @@ form button:hover {
 
 .eye-toggle {
   position: absolute;
-  left: 135px;
+  right: 0;
   top: -10px;
+  width: 50px;
   background: none;
   border: none;
   cursor: pointer;
@@ -330,7 +331,6 @@ form button:hover {
   }
 
   .eye-toggle {
-    left: 140px;
     top: -10px;
   }
 }
@@ -340,14 +340,12 @@ form button:hover {
 
 @media screen and (max-width: 480px) {
   .eye-toggle {
-    left: 115px;
     top: -10px;
   }
 }
 
 @media screen and (max-width: 400px) {
   .eye-toggle {
-    left: 100px;
     top: -10px;
   }
 }
