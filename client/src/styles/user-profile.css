@@ -176,6 +176,7 @@
   .user-left {
     border-right: none;
     border-bottom: 1px solid #ddd;
+    max-width: 100%;
   }
 
   .user-stats-section {
