@@ -1,6 +1,8 @@
 # ☕ Coffee Culture
 
-Welcome to **Coffee Culture**! This is an e-commerce website for coffee lovers, offering a seamless shopping experience with a modern UI built using **React & Vite**.
+Welcome to **Coffee Culture**! This is an e-commerce website for coffee lovers, offering a seamless shopping experience with a modern UI built using **MERN Stack**.
+
+![Coffee Shop Interface](https://i.imgur.com/ff7vn2e.png)
 
 ## 🌍 Live Demo
 
