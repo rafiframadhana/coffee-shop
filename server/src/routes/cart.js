@@ -30,15 +30,46 @@ router.get("/", isAuthenticated, async (req, res) => {
 // Update cart (*quantity)
 router.post("/", isAuthenticated, async (req, res) => {
   try {
-    const { items } = req.body;
+    const { productId, quantity = 1, action = 'add' } = req.body;
 
-    const updatedCart = await Cart.findOneAndUpdate(
-      { user: req.user._id },
-      { user: req.user._id, items },
-      { upsert: true, new: true }
-    ).populate("items.productId");
+    let updateOperation;
+    
+    if (action === 'add') {
+      // Use $inc to atomically increment quantity
+      updateOperation = {
+        $inc: { "items.$[elem].quantity": quantity },
+        $setOnInsert: { user: req.user._id }
+      };
+      
+      const result = await Cart.findOneAndUpdate(
+        { 
+          user: req.user._id, 
+          "items.productId": productId 
+        },
+        updateOperation,
+        { 
+          arrayFilters: [{ "elem.productId": productId }],
+          new: true 
+        }
+      );
 
+      // If item doesn't exist, add it
+      if (!result) {
+        await Cart.findOneAndUpdate(
+          { user: req.user._id },
+          { 
+            $push: { items: { productId, quantity } },
+            $setOnInsert: { user: req.user._id }
+          },
+          { upsert: true }
+        );
+      }
+    }
+
+    // Only populate when needed (e.g., when fetching full cart)
+    const updatedCart = await Cart.findOne({ user: req.user._id });
     res.json(updatedCart);
+    
   } catch (err) {
     res.status(500).json({ error: "Failed to save cart" });
   }
