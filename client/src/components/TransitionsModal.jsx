@@ -33,6 +33,7 @@ export default function TransitionsModal({
   message,
   closeButton,
   showButton,
+  extraFunction
 }) {
   return (
     <Modal
@@ -58,7 +59,10 @@ export default function TransitionsModal({
           </Typography>
           {showButton && (
             <Button
-              onClick={handleClose}
+              onClick={()=>{
+                handleClose();
+                extraFunction();
+              }}
               sx={{
                 mt: 3,
                 backgroundColor: "#C89F85",

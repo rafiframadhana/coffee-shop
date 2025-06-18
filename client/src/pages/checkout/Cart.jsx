@@ -70,31 +70,37 @@ export default function Cart({
       {cart.length === 0 && <CartEmpty />}
       {cart.map((item) => (
         <div className="order-item" key={item.productId._id}>
-          <img
-            src={item.productId?.src}
-            alt={item.productId?.name}
-            className="product-image"
-          />
-          <div className="item-details">
-            <h3>{item.productId?.item}</h3>
-            <div className="quantity-container">
-              {renderQuantitySection(item)}
-              <p
-                className="delete-btn"
-                onClick={() => deleteItem(item.productId._id)}
-              >
-                Delete
+          <a href={`product/${item.productId._id}`}>
+            <img
+              src={item.productId?.src}
+              alt={item.productId?.name}
+              className="product-image"
+            />
+            </a>
+            <div className="item-details">
+              <a href={`product/${item.productId._id}`}>
+              <h3>{item.productId?.item}</h3>
+              </a>
+              
+              <div className="quantity-container">
+                {renderQuantitySection(item)}
+                <p
+                  className="delete-btn"
+                  onClick={() => deleteItem(item.productId._id)}
+                >
+                  Delete
+                </p>
+              </div>
+              <p>
+                <strong>
+                  Rp.{" "}
+                  {new Intl.NumberFormat("id-ID").format(
+                    item.productId?.price * item.quantity
+                  )}
+                </strong>
               </p>
             </div>
-            <p>
-              <strong>
-                Rp.{" "}
-                {new Intl.NumberFormat("id-ID").format(
-                  item.productId?.price * item.quantity
-                )}
-              </strong>
-            </p>
-          </div>
+          
         </div>
       ))}
     </div>

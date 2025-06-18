@@ -6,13 +6,21 @@ import { Link } from "react-router-dom";
 import checkmark from "./../../assets/checkmark.png";
 import { useProducts } from "../../context/ProductContext.jsx";
 import { useAuth } from "../../context/AuthContext.jsx";
+import TransitionsModal from "./../../components/TransitionsModal.jsx";
+import { useNavigate } from "react-router-dom";
 
 export default function Product() {
   const { products, loading, error } = useProducts();
-  const { addToCart, alert } = useCart();
+  const { addToCart, alert, addingToCart } = useCart();
   const [quantities, setQuantities] = useState({});
   const [addedMessage, setAddedMessage] = useState({});
   const { user } = useAuth();
+  const [modalOpen, setModalOpen] = useState(false);
+  const [modalTitle, setModalTitle] = useState("");
+  const [modalMessage, setModalMessage] = useState("");
+  const [buttonText, setButtonText] = useState("");
+  const [showButton, setShowButton] = useState(true);
+  const navigate = useNavigate();
 
   if (loading) {
     return (
@@ -53,6 +61,20 @@ export default function Product() {
     }, 1000);
   }
 
+  function addToCartModal() {
+    setModalOpen(true);
+    setModalTitle("Alert");
+    setModalMessage(alert || "Please log in to add products to your cart.");
+    setButtonText("Proceed");
+    setShowButton(true);
+  }
+  
+  function handleAddToCart(product) {
+    addToCart(product, quantities[product._id] || 1);
+    !user && addToCartModal();
+    user && addToCartMessage(product._id);
+  }
+
   const listOfProduct = products.map((product) => {
     return (
       <div className="products-item" key={product._id}>
@@ -86,14 +108,11 @@ export default function Product() {
         <div className="btn-message-container">
           <button
             className="products-btn"
-            onClick={() => {
-              addToCart(product, quantities[product._id] || 1);
-              user && addToCartMessage(product._id);
-            }}
+            onClick={() => handleAddToCart(product)}
           >
             Add To Cart
           </button>
- 
+
           {addedMessage[product._id] && (
             <div className="added-message">
               <img src={checkmark} />
@@ -107,15 +126,30 @@ export default function Product() {
 
   return (
     <>
+      {addingToCart && (
+        <div className="loading-overlay">
+          <div className="spinner-box">
+            <div className="spinner"></div>
+          </div>
+        </div>
+      )}
       <section className="products" id="products" style={{ marginTop: "40px" }}>
         <h2>Explore Our Coffee Brews</h2>
         <div className="products-grid">{listOfProduct}</div>
       </section>
 
+      {alert && (
+        <TransitionsModal
+          open={modalOpen}
+          handleClose={() => setModalOpen(false)}
+          title={modalTitle}
+          message={modalMessage}
+          closeButton={buttonText}
+          showButton={showButton}
+          extraFunction={() => navigate("/auth/login")}
+        />
+      )}
       <ScrollToTop />
-      <div className="alert-container">
-        {alert && <p className="alert">{alert}</p>}
-      </div>
     </>
   );
 }

@@ -88,8 +88,7 @@ export default function LoginForm() {
           username: "",
           password: "",
         });
-        // Add a small delay before navigation to ensure state is set
-        setTimeout(() => navigate("/"), 100);
+        navigate("/");
       } else {
         const errorJson = await response.json().catch(() => ({}));
         setFormErrors({

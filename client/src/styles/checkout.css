@@ -41,6 +41,15 @@ body.modal-open {
   border-bottom: 1px solid #ddd;
 }
 
+.order-item a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.order-item a:hover {
+  text-decoration: underline;
+}
+
 .product-image {
   width: 100px;
   height: 100px;

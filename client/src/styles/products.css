@@ -42,7 +42,7 @@
   transition: all 0.3s ease;
 }
 
-.products-item:hover{
+.products-item:hover {
   transform: translateY(-5px);
 }
 
@@ -184,48 +184,3 @@
     right: 60px;
   }
 }
-
-
-.alert-container {
-  position: fixed;
-  top: 100px;
-  left: 50%;
-  transform: translateX(-50%);
-  z-index: 1000;
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-  
-}
-
-.alert {
-  padding: 1rem 1.25rem;
-  border-radius: 8px;
-  min-width: 280px;
-  max-width: 400px;
-  font-weight: 500;
-  font-size: 18px;
-  font-family: Arial, Helvetica, sans-serif;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
-  animation: slideDown 0.4s ease-out;
-  background-color: #f6f6f6;
-  color: rgb(77, 0, 0);
-  border-left: 5px solid var(--primary-color);
-  border-right: 5px solid var(--primary-color);
-  opacity: 0.95;
-  text-align: center;
-}
-
-  
-
-@keyframes slideDown {
-  0% {
-    opacity: 0;
-    transform: translateY(-20px);
-  }
-  100% {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-

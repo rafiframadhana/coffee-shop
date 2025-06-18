@@ -1,6 +1,5 @@
 import { useState, createContext, useContext, useEffect } from "react";
 import { useAuth } from "./AuthContext";
-import { useNavigate } from "react-router-dom";
 
 const CartContext = createContext();
 
@@ -12,9 +11,9 @@ export const CartProvider = ({ children }) => {
   const [alert, setAlert] = useState(null);
   const [totalPrice, setTotalPrice] = useState(0);
   const [loading, setLoading] = useState(true);
+  const [addingToCart , setAddingToCart ] = useState(false);
   const [error, setError] = useState(null);
   const { user } = useAuth();
-  const navigate = useNavigate();
   const API_URL = import.meta.env.VITE_API_URL;
 
   useEffect(() => {
@@ -46,20 +45,18 @@ export const CartProvider = ({ children }) => {
   const addToCart = async (product, quantity) => {
     if (!user) {
       setAlert(
-        "Please log in to add products to your cart. Redirecting to login page..."
+        "Please log in to add products to your cart."
       );
-      setTimeout(() => setAlert(""), 4500);
-      setTimeout(() => navigate("/auth/login"), 5000);
       return;
     }
 
     if (!product._id) {
       console.error("Invalid product: missing _id");
-      setAlert("Cannot add item to cart: product ID missing");
       return;
     }
 
     try {
+      setAddingToCart(true);
       const updatedCart = [...cart];
       const existingItemIndex = updatedCart.findIndex(
         (item) => (item.productId._id || item.productId) === product._id
@@ -96,6 +93,8 @@ export const CartProvider = ({ children }) => {
     } catch (err) {
       console.error("Failed to sync cart:", err);
       setAlert("Failed to update cart. Please try again.");
+    } finally{
+      setAddingToCart(false);
     }
   };
 
@@ -162,6 +161,7 @@ export const CartProvider = ({ children }) => {
         loading,
         error,
         fetchCart,
+        addingToCart,
       }}
     >
       {children}

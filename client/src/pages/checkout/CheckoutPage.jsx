@@ -1,5 +1,5 @@
 import { useCart } from "../../context/CartContext";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "./../../styles/checkout.css";
 import TransitionsModal from "./../../components/TransitionsModal.jsx";
@@ -15,6 +15,7 @@ export default function CheckoutPage() {
   const [modalMessage, setModalMessage] = useState("");
   const [buttonText, setButtonText] = useState("");
   const [showButton, setShowButton] = useState(true);
+  const navToProductsPage = useRef(null);
   const navigate = useNavigate();
 
   const handleSubmit = (event) => {
@@ -26,31 +27,17 @@ export default function CheckoutPage() {
         "Your cart is empty. Please add items before placing an order."
       );
       setButtonText("Close");
-      setShowButton(true);
+      navToProductsPage.current = null;
     } else {
       setModalTitle("Order Placed");
-      setModalMessage(
-        <>
-          <span className="checkout-modal-title">
-            Your order has been placed successfully!
-          </span>
-          <span className="checkout-modal-desc">
-            You will be redirected to Homepage...
-          </span>
-        </>
-      );
-      setShowButton(false);
+      setModalMessage("Your order has been placed successfully!");
+      setButtonText("View More Products");
+      navToProductsPage.current = () => {
+        navigate("/products");
+      };
       clearCart();
-      setTimeout(() => {
-        navigate("/");
-      }, 3000);
     }
-
-    window.scrollTo({
-      top: 0,
-      behavior: "smooth",
-    });
-
+    setShowButton(true);
     setModalOpen(true);
   };
 
@@ -95,6 +82,7 @@ export default function CheckoutPage() {
           newQuantity={newQuantity}
           setNewQuantity={setNewQuantity}
         />
+
         <CheckoutDetails total={displayedTotal} handleSubmit={handleSubmit} />
       </div>
       <TransitionsModal
@@ -104,6 +92,7 @@ export default function CheckoutPage() {
         message={modalMessage}
         closeButton={buttonText}
         showButton={showButton}
+        extraFunction={navToProductsPage.current}
       />
     </div>
   );

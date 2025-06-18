@@ -1,19 +1,26 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useCart } from "../../context/CartContext.jsx";
 import "./../../styles/product-details.css";
 import checkmark from "./../../assets/checkmark.png";
 import { useAuth } from "../../context/AuthContext.jsx";
+import TransitionsModal from "./../../components/TransitionsModal.jsx";
 
 export default function ProductDetails() {
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const { productId } = useParams();
-  const { addToCart, alert } = useCart();
+  const { addToCart, alert, addingToCart } = useCart();
   const [quantity, setQuantity] = useState(1);
   const [addedMessage, setAddedMessage] = useState("");
-  const {user} = useAuth();
+  const { user } = useAuth();
+  const [modalOpen, setModalOpen] = useState(false);
+  const [modalTitle, setModalTitle] = useState("");
+  const [modalMessage, setModalMessage] = useState("");
+  const [buttonText, setButtonText] = useState("");
+  const [showButton, setShowButton] = useState(true);
+  const navigate = useNavigate();
   const API_URL = import.meta.env.VITE_API_URL;
 
   useEffect(() => {
@@ -60,7 +67,17 @@ export default function ProductDetails() {
     setQuantity(parseInt(event.target.value));
   }
 
+  function addToCartModal() {
+    setModalOpen(true);
+    setModalTitle("Alert");
+    setModalMessage(alert || "Please log in to add products to your cart.");
+    setButtonText("Proceed");
+    setShowButton(true);
+  }
+
   function handleAddToCart() {
+    !user && addToCartModal();
+
     addToCart(product, quantity);
     setAddedMessage("Added");
 
@@ -109,21 +126,39 @@ export default function ProductDetails() {
             </div>
 
             <button onClick={handleAddToCart}>Add to Cart</button>
-            {user && <div>
-              {addedMessage && (
-                <div className="added-message-details">
-                  <img src={checkmark} />
-                  <p>{addedMessage}</p>
-                </div>
-              )}
-            </div>}
+            {user && (
+              <div>
+                {addedMessage && (
+                  <div className="added-message-details">
+                    <img src={checkmark} />
+                    <p>{addedMessage}</p>
+                  </div>
+                )}
+              </div>
+            )}
           </div>
         </div>
       </div>
-      
-      <div className="alert-container">
-        {alert && <p className="alert">{alert}</p>}
-      </div>
+
+      {alert && (
+        <TransitionsModal
+          open={modalOpen}
+          handleClose={() => setModalOpen(false)}
+          title={modalTitle}
+          message={modalMessage}
+          closeButton={buttonText}
+          showButton={showButton}
+          extraFunction={() => navigate("/auth/login")}
+        />
+      )}
+
+      {addingToCart && (
+        <div className="loading-overlay">
+          <div className="spinner-box">
+            <div className="spinner"></div>
+          </div>
+        </div>
+      )}
     </>
   );
 }
