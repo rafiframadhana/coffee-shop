@@ -33,8 +33,8 @@ export default function Cart({
 
   const renderQuantitySection = (item) => {
     return editingItem === item.productId._id ? (
-      <div key={item.productId._id}>
-        <p>
+      <div key={item.productId._id} className="input-save-qty">
+        <label>
           Qty:
           <input
             className="quantity-input"
@@ -43,7 +43,7 @@ export default function Cart({
             value={newQuantity}
             onChange={(e) => setNewQuantity(Number(e.target.value))}
           />
-        </p>
+        </label>
         <p
           onClick={() => handleSaveClick(item.productId._id)}
           className="save-btn"
@@ -53,7 +53,7 @@ export default function Cart({
       </div>
     ) : (
       <>
-        <p>Qty: {item.quantity}</p>
+        <p>Qty: <strong>{item.quantity}</strong></p>
         <p
           onClick={() => handleUpdateClick(item.productId._id, item.quantity)}
           className="update-btn"

@@ -8,6 +8,7 @@ export default function AuthMenu({ closeMenu }) {
   const [open, setOpen] = useState(false);
   const location = useLocation();
   const isHome = location.pathname === "/";
+  const isAuthPage = location.pathname === "/auth/register" || location.pathname === "/auth/login";
   const menuRef = useRef(null);
 
   const closeMenuDropdown = () => {
@@ -30,7 +31,7 @@ export default function AuthMenu({ closeMenu }) {
 
   if (!user) {
     return (
-      <div className={`auth-menu ${isHome ? "home" : "nothome"}`}>
+      <div className={`auth-menu ${isHome || isAuthPage ? "home" : "nothome"}`}>
         <Link to="/auth/login" onClick={closeMenuDropdown}>
           Sign In
         </Link>

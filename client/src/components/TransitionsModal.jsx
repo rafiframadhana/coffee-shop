@@ -33,14 +33,18 @@ export default function TransitionsModal({
   message,
   closeButton,
   showButton,
-  extraFunction
+  extraFunction,
+  handleScrollUp,
 }) {
   return (
     <Modal
       aria-labelledby="transition-modal-title"
       aria-describedby="transition-modal-description"
       open={open}
-      onClose={handleClose}
+      onClose={() => {
+        handleClose();
+        handleScrollUp();
+      }}
       closeAfterTransition
       slots={{ backdrop: Backdrop }}
       slotProps={{
@@ -59,9 +63,10 @@ export default function TransitionsModal({
           </Typography>
           {showButton && (
             <Button
-              onClick={()=>{
+              onClick={() => {
                 handleClose();
                 extraFunction();
+                handleScrollUp();
               }}
               sx={{
                 mt: 3,

@@ -151,7 +151,7 @@ export default function RegistrationForm() {
               <input
                 type={showPassword ? "text" : "password"}
                 name="password"
-                placeholder="Password goes here..."
+                placeholder="password goes here..."
                 value={formData.password}
                 onChange={handleChange}
                 required
@@ -180,7 +180,7 @@ export default function RegistrationForm() {
               <input
                 type={showConfirmPassword ? "text" : "password"}
                 name="confirmPassword"
-                placeholder="Write it once again..."
+                placeholder="write it once again..."
                 value={formData.confirmPassword}
                 onChange={handleChange}
                 required

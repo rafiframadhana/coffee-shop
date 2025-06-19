@@ -5,7 +5,6 @@ import { Outlet } from "react-router-dom";
 function Authentication() {
   return (
     <div className="auth-container">
-      <img src={coffeImg} className="auth-bg-img" />
       <div className="auth-form">
         <Outlet />
       </div>

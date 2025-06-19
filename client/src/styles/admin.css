@@ -1,6 +1,8 @@
-.welcome-admin{
-    display: flex;
-    justify-content: center;
+.welcome-admin {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
 
 .form-title {

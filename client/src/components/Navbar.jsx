@@ -17,6 +17,7 @@ export default function Navbar() {
   const itemQuantity = cart.reduce((total, item) => total + item.quantity, 0);
   const location = useLocation();
   const isHome = location.pathname === "/";
+  const isAuthPage = location.pathname === "/auth/register" || location.pathname === "/auth/login";
 
   useEffect(() => {
     const handleResize = () => {
@@ -29,11 +30,11 @@ export default function Navbar() {
 
   return (
     <header>
-      <nav className={`navbar ${isHome ? "transparent" : "solid"}`}>
+      <nav className={`navbar ${isHome || isAuthPage ? "transparent" : "solid"}`}>
         <Link
           to="/"
           className="brand-name"
-          style={{ color: isHome ? "#ffffff" : "black" }}
+          style={{ color: isHome || isAuthPage ? "#ffffff" : "black" }}
         >
           Coffee Culture
         </Link>
@@ -42,12 +43,12 @@ export default function Navbar() {
         <div className={`hamburger ${user && "logged-in"}`} onClick={() => setMenuOpen(!menuOpen)}>
           {menuOpen ? (
             <CloseIcon
-              sx={{ color: isHome ? "white" : "black" }}
+              sx={{ color: isHome || isAuthPage ? "white" : "black" }}
               fontSize="large"
             />
           ) : (
             <MenuIcon
-              sx={{ color: isHome ? "white" : "black" }}
+              sx={{ color: isHome || isAuthPage ? "white" : "black" }}
               fontSize="large"
             />
           )}
@@ -55,7 +56,7 @@ export default function Navbar() {
 
         <ul
           className={`nav-menu ${menuOpen ? "active" : ""} ${
-            isHome ? "home" : "not-home"
+            isHome || isAuthPage ? "home" : "not-home"
           } ${user ? "logged-in" : "not-logged-in"}`}
         >
           <li>

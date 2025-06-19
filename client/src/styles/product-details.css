@@ -168,7 +168,7 @@
   }
 }
 
-@media (max-width: 480px) {
+@media (max-width: 550px) {
   .product-details {
     padding: 5px;
   }

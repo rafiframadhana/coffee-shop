@@ -16,6 +16,7 @@ export default function CheckoutPage() {
   const [buttonText, setButtonText] = useState("");
   const [showButton, setShowButton] = useState(true);
   const navToProductsPage = useRef(null);
+  const scrollUp = useRef(null);
   const navigate = useNavigate();
 
   const handleSubmit = (event) => {
@@ -37,6 +38,13 @@ export default function CheckoutPage() {
       };
       clearCart();
     }
+
+    scrollUp.current = () => {
+      window.scrollTo({
+        top: 0,
+        behavior: "smooth",
+      });
+    };
     setShowButton(true);
     setModalOpen(true);
   };
@@ -93,6 +101,7 @@ export default function CheckoutPage() {
         closeButton={buttonText}
         showButton={showButton}
         extraFunction={navToProductsPage.current}
+        handleScrollUp={scrollUp.current}
       />
     </div>
   );

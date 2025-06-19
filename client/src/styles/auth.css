@@ -1,24 +1,24 @@
-.welcome-admin {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-}
-
 .auth-container {
+  position: relative;
   display: flex;
   justify-content: center;
   align-items: center;
   width: 100%;
   height: 100vh;
+  background-image: url("/background/hero/hero-bg.png");
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: top;
+  z-index: 1;
+  overflow: hidden;
 }
 
-.auth-bg-img {
-  height: 100vh;
-  margin-top: 150px;
-  width: 65%;
-  object-fit: none;
-  object-position: right top;
+.auth-container::before {
+  content: "";
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background-color: rgba(0, 0, 0, 0.568);
+  z-index: -1;
 }
 
 .auth-form {
@@ -338,7 +338,7 @@ form button:hover {
 /* @media screen and (max-width: 768px) {
 } */
 
-@media screen and (max-width: 480px) {
+@media screen and (max-width: 550px) {
   .eye-toggle {
     top: -10px;
   }
