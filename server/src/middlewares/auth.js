@@ -1,6 +1,6 @@
-import { AuthenticationError, AuthorizationError } from './errors.js';
+import { AuthenticationError, AuthorizationError } from '../utils/errors.js';
 import { MESSAGES } from '../config/constants.js';
-import logger from './logger.js';
+import logger from '../utils/logger.js';
 
 /**
  * Check if user is authenticated

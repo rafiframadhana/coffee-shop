@@ -3,7 +3,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { useProduct } from "../../hooks/useProducts";
 import { useCart, useUpdateCart } from "../../hooks/useCart";
 import { formatCurrency } from "../../utils/format";
-import { MAX_ORDER_QUANTITY } from "../../constants/config";
+import { MAX_ORDER_QUANTITY } from "../../config/constants";
 import "./../../styles/product-details.css";
 import checkmark from "./../../assets/checkmark.png";
 import { useAuth } from "../../hooks/useAuthContext";

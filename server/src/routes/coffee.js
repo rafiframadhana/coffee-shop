@@ -2,7 +2,7 @@ import express from "express";
 import * as coffeeController from "../controllers/coffee.controller.js";
 import { validateCreateCoffee, validateUpdateCoffee, validateCoffeeId } from "../validators/coffee.validator.js";
 import { validateRequest, asyncHandler } from "../middlewares/errorHandler.js";
-import { isAdmin } from "../utils/middlewares.js";
+import { isAdmin } from "../middlewares/auth.js";
 
 const router = express.Router();
 

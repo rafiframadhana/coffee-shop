@@ -1,6 +1,6 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { userApi } from '../services/api';
-import { QUERY_KEYS } from '../constants/config';
+import { userApi } from '../config/api';
+import { QUERY_KEYS } from '../config/constants';
 
 /**
  * Fetch all users (Admin only)

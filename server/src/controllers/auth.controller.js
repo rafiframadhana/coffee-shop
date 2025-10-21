@@ -1,6 +1,5 @@
 import passport from 'passport';
 import * as authService from '../services/auth.service.js';
-import { sendSuccess, sendUnauthorized } from '../utils/response.js';
 import { MESSAGES, HTTP_STATUS } from '../config/constants.js';
 import logger from '../utils/logger.js';
 
@@ -10,7 +9,11 @@ import logger from '../utils/logger.js';
 export const register = async (req, res) => {
   const { displayName, username, password } = req.body;
   const newUser = await authService.registerUser(displayName, username, password);
-  sendSuccess(res, newUser, MESSAGES.AUTH_REGISTRATION_SUCCESS);
+  res.status(HTTP_STATUS.OK).json({
+    success: true,
+    message: MESSAGES.AUTH_REGISTRATION_SUCCESS,
+    data: newUser,
+  });
 };
 
 /**
@@ -46,7 +49,11 @@ export const login = (req, res, next) => {
       logger.info(`User logged in: ${user.username}`);
       const userResponse = authService.formatUserResponse(user);
 
-      return sendSuccess(res, { user: userResponse }, MESSAGES.AUTH_LOGIN_SUCCESS);
+      return res.status(HTTP_STATUS.OK).json({
+        success: true,
+        message: MESSAGES.AUTH_LOGIN_SUCCESS,
+        data: { user: userResponse },
+      });
     });
   })(req, res, next);
 };
@@ -56,7 +63,10 @@ export const login = (req, res, next) => {
  */
 export const logout = (req, res, next) => {
   if (!req.isAuthenticated()) {
-    return sendUnauthorized(res, MESSAGES.AUTH_NOT_AUTHENTICATED);
+    return res.status(HTTP_STATUS.UNAUTHORIZED).json({
+      success: false,
+      message: MESSAGES.AUTH_NOT_AUTHENTICATED,
+    });
   }
 
   const username = req.user.username;
@@ -68,7 +78,11 @@ export const logout = (req, res, next) => {
     }
 
     logger.info(`User logged out: ${username}`);
-    sendSuccess(res, null, MESSAGES.AUTH_LOGOUT_SUCCESS);
+    res.status(HTTP_STATUS.OK).json({
+      success: true,
+      message: MESSAGES.AUTH_LOGOUT_SUCCESS,
+      data: null,
+    });
   });
 };
 
@@ -78,8 +92,15 @@ export const logout = (req, res, next) => {
 export const checkAuth = (req, res) => {
   if (req.isAuthenticated()) {
     const userResponse = authService.formatUserResponse(req.user);
-    return sendSuccess(res, { user: userResponse });
+    return res.status(HTTP_STATUS.OK).json({
+      success: true,
+      message: 'Success',
+      data: { user: userResponse },
+    });
   } else {
-    return sendUnauthorized(res, MESSAGES.AUTH_NOT_AUTHENTICATED);
+    return res.status(HTTP_STATUS.UNAUTHORIZED).json({
+      success: false,
+      message: MESSAGES.AUTH_NOT_AUTHENTICATED,
+    });
   }
 };

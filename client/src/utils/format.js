@@ -1,4 +1,4 @@
-import { LOCALE, CURRENCY } from '../constants/config';
+import { LOCALE, CURRENCY } from '../config/constants';
 
 /**
  * Format price to Indonesian Rupiah

@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
-import { MESSAGE_DISPLAY_DURATION } from '../constants/config';
+import { MESSAGE_DISPLAY_DURATION } from '../config/constants';
 
 /**
  * Toast notification hook for displaying temporary messages

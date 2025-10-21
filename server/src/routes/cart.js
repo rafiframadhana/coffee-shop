@@ -2,7 +2,7 @@ import { Router } from "express";
 import * as cartController from "../controllers/cart.controller.js";
 import { validateUpdateCart, validateUpdateQuantity, validateDeleteCartItem } from "../validators/cart.validator.js";
 import { validateRequest, asyncHandler } from "../middlewares/errorHandler.js";
-import { isAuthenticated } from "../utils/middlewares.js";
+import { isAuthenticated } from "../middlewares/auth.js";
 
 const router = Router();
 

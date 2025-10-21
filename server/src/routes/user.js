@@ -2,7 +2,7 @@ import { Router } from "express";
 import * as userController from "../controllers/user.controller.js";
 import { validateUserId, validateUpdateUser } from "../validators/user.validator.js";
 import { validateRequest, asyncHandler } from "../middlewares/errorHandler.js";
-import { isAdmin } from "../utils/middlewares.js";
+import { isAdmin } from "../middlewares/auth.js";
 
 const router = Router();
 

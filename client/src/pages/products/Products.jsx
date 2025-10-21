@@ -8,7 +8,7 @@ import { useCart, useUpdateCart } from "../../hooks/useCart";
 import { useAuth } from "../../hooks/useAuthContext";
 import TransitionsModal from "./../../components/TransitionsModal.jsx";
 import { formatCurrency } from "../../utils/format";
-import { MAX_ORDER_QUANTITY } from "../../constants/config";
+import { MAX_ORDER_QUANTITY } from "../../config/constants";
 
 export default function Product() {
   // React Query hooks for data fetching

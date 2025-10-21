@@ -1,6 +1,6 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { coffeeApi } from '../services/api';
-import { QUERY_KEYS } from '../constants/config';
+import { coffeeApi } from '../config/api';
+import { QUERY_KEYS } from '../config/constants';
 
 /**
  * Fetch all products

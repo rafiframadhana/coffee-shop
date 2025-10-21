@@ -1,6 +1,6 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { authApi } from '../services/api';
-import { QUERY_KEYS, AUTH_CHECK_INTERVAL } from '../constants/config';
+import { authApi } from '../config/api';
+import { QUERY_KEYS, AUTH_CHECK_INTERVAL } from '../config/constants';
 import { useNavigate } from 'react-router-dom';
 
 /**
