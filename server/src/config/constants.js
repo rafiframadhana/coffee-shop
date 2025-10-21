@@ -6,8 +6,10 @@ export const BCRYPT = {
 
 export const SESSION = {
   MAX_AGE: 1000 * 60 * 60 * 24 * 7, // 7 days
-  COOKIE_SAME_SITE: 'none',
-  COOKIE_SECURE: true,
+  // Use 'lax' for localhost development, 'none' for production cross-origin
+  COOKIE_SAME_SITE: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
+  // secure: true requires HTTPS, only enable in production
+  COOKIE_SECURE: process.env.NODE_ENV === 'production',
   COOKIE_HTTP_ONLY: true,
 };
 

@@ -1,48 +1,103 @@
-import { useEffect, useState } from "react";
+import { useState, useCallback, useMemo } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { useCart } from "../../context/CartContext.jsx";
+import { useProduct } from "../../hooks/useProducts";
+import { useCart, useUpdateCart } from "../../hooks/useCart";
+import { formatCurrency } from "../../utils/format";
+import { MAX_ORDER_QUANTITY } from "../../constants/config";
 import "./../../styles/product-details.css";
 import checkmark from "./../../assets/checkmark.png";
-import { useAuth } from "../../context/AuthContext.jsx";
+import { useAuth } from "../../hooks/useAuthContext";
 import TransitionsModal from "./../../components/TransitionsModal.jsx";
 
 export default function ProductDetails() {
-  const [product, setProduct] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
   const { productId } = useParams();
-  const { addToCart, alert, addingToCart } = useCart();
+  const navigate = useNavigate();
+
+  // React Query hooks for data fetching
+  const { data: product, isLoading, error } = useProduct(productId);
+  const { data: cart } = useCart();
+  const updateCart = useUpdateCart();
+
+  // Auth state
+  const { user } = useAuth();
+
+  // Local UI state
   const [quantity, setQuantity] = useState(1);
   const [addedMessage, setAddedMessage] = useState("");
-  const { user } = useAuth();
   const [modalOpen, setModalOpen] = useState(false);
-  const [modalTitle, setModalTitle] = useState("");
-  const [modalMessage, setModalMessage] = useState("");
-  const [buttonText, setButtonText] = useState("");
-  const [showButton, setShowButton] = useState(true);
-  const navigate = useNavigate();
-  const API_URL = import.meta.env.VITE_API_URL;
 
-  useEffect(() => {
-    const fetchProductById = async () => {
-      try {
-        const response = await fetch(`${API_URL}/api/coffee/${productId}`, {
-          credentials: "include",
-        });
-        const result = await response.json();
-        // Handle standardized response format { success, message, data }
-        setProduct(result.data || result);
-      } catch (error) {
-        console.error("Error fetching data:", error);
-        setError("Failed to load products");
-      } finally {
-        setLoading(false);
+  // Memoized quantity options (before early returns)
+  const quantityOptions = useMemo(() => {
+    return Array.from({ length: Math.min(10, MAX_ORDER_QUANTITY) }, (_, i) => i + 1).map((num) => (
+      <option key={num} value={num}>
+        {num}
+      </option>
+    ));
+  }, []);
+
+  // Memoized callbacks for performance (before early returns)
+  const handleSelectQuantity = useCallback((event) => {
+    setQuantity(parseInt(event.target.value));
+  }, []);
+
+  const showLoginModal = useCallback(() => {
+    setModalOpen(true);
+  }, []);
+
+  const handleAddToCart = useCallback(async () => {
+    // If not logged in, show login modal
+    if (!user) {
+      showLoginModal();
+      return;
+    }
+
+    try {
+      // Get current cart items
+      const currentItems = cart?.items || [];
+
+      // Check if product already exists in cart
+      // Note: productId can be either an object (populated) or a string (ID only)
+      const existingItemIndex = currentItems.findIndex(
+        (item) => (item.productId?._id || item.productId) === product._id
+      );
+
+      // Always ensure we're sending clean data with ONLY productId and quantity
+      let updatedItems;
+      if (existingItemIndex >= 0) {
+        // Update existing item quantity - rebuild the entire array with clean data
+        updatedItems = currentItems.map((item, index) => ({
+          productId: item.productId?._id || item.productId,
+          quantity: index === existingItemIndex ? item.quantity + quantity : item.quantity
+        }));
+      } else {
+        // Add new item to cart - ensure all items have clean data
+        updatedItems = [
+          ...currentItems.map(item => ({
+            productId: item.productId?._id || item.productId,
+            quantity: item.quantity
+          })),
+          {
+            productId: product._id,
+            quantity,
+          },
+        ];
       }
-    };
-    fetchProductById();
-  }, [productId, API_URL]); // Added API_URL to deps
 
-  if (loading) {
+      // Update cart using React Query mutation with optimistic updates
+      await updateCart.mutateAsync(updatedItems);
+
+      // Show success message
+      setAddedMessage("Added");
+      setTimeout(() => {
+        setAddedMessage("");
+      }, 1000);
+    } catch (error) {
+      console.error("Failed to add to cart:", error);
+    }
+  }, [user, cart, product, quantity, updateCart, showLoginModal]);
+
+  // Handle loading state (after all hooks)
+  if (isLoading) {
     return (
       <div className="spinner-container">
         <div className="spinner"></div>
@@ -50,41 +105,20 @@ export default function ProductDetails() {
     );
   }
 
+  // Handle error state
   if (error) {
     return (
       <div className="error-message">
         <div className="error-box">
-          <span className="error-icon">⚠️</span> {error}
+          <span className="error-icon">⚠️</span> {error.message || "Failed to load product"}
         </div>
       </div>
     );
   }
 
+  // Handle product not found
   if (!product) {
     return <div>Product not found</div>;
-  }
-
-  function handleSelectQuantity(event) {
-    setQuantity(parseInt(event.target.value));
-  }
-
-  function addToCartModal() {
-    setModalOpen(true);
-    setModalTitle("Alert");
-    setModalMessage(alert || "Please log in to add products to your cart.");
-    setButtonText("Proceed");
-    setShowButton(true);
-  }
-
-  function handleAddToCart() {
-    !user && addToCartModal();
-
-    addToCart(product, quantity);
-    setAddedMessage("Added");
-
-    setTimeout(() => {
-      setAddedMessage("");
-    }, 1000);
   }
 
   return (
@@ -99,7 +133,7 @@ export default function ProductDetails() {
           <p>{product.contain}</p>
           <p className="price">
             <strong>
-              Price: Rp. {new Intl.NumberFormat("id-ID").format(product.price)}
+              Price: {formatCurrency(product.price)}
             </strong>
           </p>
           <p>
@@ -113,25 +147,21 @@ export default function ProductDetails() {
                 value={quantity}
                 onChange={handleSelectQuantity}
               >
-                <option value={1}>1</option>
-                <option value={2}>2</option>
-                <option value={3}>3</option>
-                <option value={4}>4</option>
-                <option value={5}>5</option>
-                <option value={6}>6</option>
-                <option value={7}>7</option>
-                <option value={8}>8</option>
-                <option value={9}>9</option>
-                <option value={10}>10</option>
+                {quantityOptions}
               </select>
             </div>
 
-            <button onClick={handleAddToCart}>Add to Cart</button>
+            <button
+              onClick={handleAddToCart}
+              disabled={updateCart.isLoading}
+            >
+              Add to Cart
+            </button>
             {user && (
               <div>
                 {addedMessage && (
                   <div className="added-message-details">
-                    <img src={checkmark} />
+                    <img src={checkmark} alt="Added to cart" />
                     <p>{addedMessage}</p>
                   </div>
                 )}
@@ -141,19 +171,19 @@ export default function ProductDetails() {
         </div>
       </div>
 
-      {alert && (
-        <TransitionsModal
-          open={modalOpen}
-          handleClose={() => setModalOpen(false)}
-          title={modalTitle}
-          message={modalMessage}
-          closeButton={buttonText}
-          showButton={showButton}
-          extraFunction={() => navigate("/auth/login")}
-        />
-      )}
+      {/* Login modal for unauthenticated users */}
+      <TransitionsModal
+        open={modalOpen}
+        handleClose={() => setModalOpen(false)}
+        title="Alert"
+        message="Please log in to add products to your cart."
+        closeButton="Proceed"
+        showButton={true}
+        extraFunction={() => navigate("/auth/login")}
+      />
 
-      {addingToCart && (
+      {/* Show loading overlay during cart update */}
+      {updateCart.isLoading && (
         <div className="loading-overlay">
           <div className="spinner-box">
             <div className="spinner"></div>

@@ -1,5 +1,5 @@
-import { useEffect, useState } from "react";
-import { useProducts } from "../../context/ProductContext";
+import { useState, useMemo, useCallback } from "react";
+import { useProducts, useUpdateProduct, useDeleteProduct } from "../../hooks/useProducts";
 import {
   Table,
   TableBody,
@@ -18,131 +18,90 @@ import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import SearchIcon from "@mui/icons-material/Search";
 import Tooltip from "@mui/material/Tooltip";
+import { filterBySearch, truncateText } from "../../utils/search";
+import { formatCurrency } from "../../utils/format";
+import { useToast } from "../../hooks/useToast";
 
 function EditProduct() {
   const [searchTerm, setSearchTerm] = useState("");
   const [openModal, setOpenModal] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState(null);
-  const [error, setError] = useState(null);
-  const [success, setSuccess] = useState(null);
   const [confirmOpen, setConfirmOpen] = useState(false);
   const [productToDelete, setProductToDelete] = useState(null);
-  const { products, setProducts, loading } = useProducts();
-  const API_URL = import.meta.env.VITE_API_URL;
 
-  useEffect(() => {
-    if (success || error) {
-      const timer = setTimeout(() => {
-        setSuccess(null);
-        setError(null);
-      }, 3000);
+  // React Query hooks
+  const { data: products = [], isLoading } = useProducts();
+  const updateProduct = useUpdateProduct();
+  const deleteProduct = useDeleteProduct();
 
-      return () => clearTimeout(timer);
+  // Toast notifications
+  const { message, type, showSuccess, showError } = useToast();
+
+  // Memoized filtered products
+  const filteredProducts = useMemo(() => {
+    return filterBySearch(products, searchTerm, [
+      'item',
+      'description',
+      'contain',
+      'src',
+      'price',
+      '_id'
+    ]);
+  }, [products, searchTerm]);
+
+  // Memoized callbacks
+  const handleEditClick = useCallback((product) => {
+    setSelectedProduct(product);
+    setOpenModal(true);
+  }, []);
+
+  const handleInputChange = useCallback((e) => {
+    const { name, value } = e.target;
+    setSelectedProduct((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  }, []);
+
+  const handleUpdate = useCallback(async () => {
+    try {
+      await updateProduct.mutateAsync({
+        id: selectedProduct._id,
+        data: {
+          item: selectedProduct.item,
+          src: selectedProduct.src,
+          contain: selectedProduct.contain,
+          price: Number(selectedProduct.price),
+          description: selectedProduct.description,
+        },
+      });
+
+      showSuccess("Product updated successfully");
+      setOpenModal(false);
+    } catch (err) {
+      showError(err.message || "Failed to update product");
+      console.error(err);
     }
-  }, [success, error]);
+  }, [selectedProduct, updateProduct, showSuccess, showError]);
 
-  if (loading) {
+  const handleDelete = useCallback(async (id) => {
+    try {
+      await deleteProduct.mutateAsync(id);
+      showSuccess("Product deleted successfully");
+      setConfirmOpen(false);
+    } catch (err) {
+      showError(err.message || "Failed to delete product");
+    }
+  }, [deleteProduct, showSuccess, showError]);
+
+  // Handle loading state
+  if (isLoading) {
     return (
       <div className="spinner-container">
         <div className="spinner"></div>
       </div>
     );
   }
-
-  function truncateText(text, maxLength) {
-    if (!text) return "";
-    return text.length > maxLength ? text.slice(0, maxLength) + "..." : text;
-  }
-
-  const handleEditClick = (product) => {
-    setSelectedProduct(product);
-    setOpenModal(true);
-  };
-
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setSelectedProduct((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
-  };
-
-  const handleUpdate = async () => {
-    setError(null);
-    setSuccess(null);
-
-    try {
-      const response = await fetch(
-        `${API_URL}/api/coffee/${selectedProduct._id}`,
-        {
-          method: "PATCH",
-          credentials: "include",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            item: selectedProduct.item,
-            src: selectedProduct.src,
-            contain: selectedProduct.contain,
-            price: Number(selectedProduct.price),
-            description: selectedProduct.description,
-          }),
-        }
-      );
-
-      if (!response.ok) {
-        throw new Error("Failed to edit Product");
-      }
-
-      const updatedProduct = await response.json();
-
-      setProducts((prevProducts) =>
-        prevProducts.map((product) =>
-          product._id === updatedProduct._id ? updatedProduct : product
-        )
-      );
-
-      setSuccess("Product updated succesfully");
-
-      setOpenModal(false);
-    } catch (err) {
-      setError(err.message);
-      console.log(err);
-    }
-  };
-
-  const handleDelete = async (id) => {
-    try {
-      const response = await fetch(`${API_URL}/api/coffee/${id}`, {
-        method: "DELETE",
-        credentials: "include",
-      });
-
-      if (!response.ok) {
-        throw new Error("Failed to delete product");
-      }
-
-      setProducts((prevProducts) =>
-        prevProducts.filter((product) => product._id !== id)
-      );
-
-      setSuccess("Product deleted succesfully");
-    } catch (err) {
-      setError(err.message);
-    }
-  };
-
-  const filteredProducts = products.filter((product) => {
-    const lowerCaseSearch = searchTerm.toLowerCase();
-    return (
-      product.item.toLowerCase().includes(lowerCaseSearch) ||
-      product.description.toLowerCase().includes(lowerCaseSearch) ||
-      product.contain.toLowerCase().includes(lowerCaseSearch) ||
-      product.src.toLowerCase().includes(lowerCaseSearch) ||
-      String(product.price).toLowerCase().includes(lowerCaseSearch) ||
-      product._id.toLowerCase().includes(lowerCaseSearch)
-    );
-  });
 
   return (
     <>
@@ -248,11 +207,7 @@ function EditProduct() {
                       {contain}
                     </TableCell>
                     <TableCell>
-                      {new Intl.NumberFormat("id-ID", {
-                        style: "currency",
-                        currency: "IDR",
-                        minimumFractionDigits: 0,
-                      }).format(price)}
+                      {formatCurrency(price)}
                     </TableCell>
 
                     <TableCell
@@ -324,8 +279,7 @@ function EditProduct() {
       </Box>
 
       <div className="notification-container">
-        {error && <p className="notification error">{error}</p>}
-        {success && <p className="notification success">{success}</p>}
+        {message && <p className={`notification ${type}`}>{message}</p>}
       </div>
 
       <Modal open={openModal} onClose={() => setOpenModal(false)}>

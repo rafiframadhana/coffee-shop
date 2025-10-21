@@ -1,4 +1,4 @@
-import * as React from "react";
+import PropTypes from "prop-types";
 import Backdrop from "@mui/material/Backdrop";
 import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
@@ -90,3 +90,14 @@ export default function TransitionsModal({
     </Modal>
   );
 }
+
+TransitionsModal.propTypes = {
+  open: PropTypes.bool.isRequired,
+  handleClose: PropTypes.func.isRequired,
+  title: PropTypes.string.isRequired,
+  message: PropTypes.string.isRequired,
+  closeButton: PropTypes.string,
+  showButton: PropTypes.bool,
+  extraFunction: PropTypes.func,
+  handleScrollUp: PropTypes.func,
+};

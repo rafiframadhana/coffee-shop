@@ -1,88 +1,44 @@
-import { createContext, useState, useEffect, useContext } from "react";
-import { useNavigate } from "react-router-dom";
+import { createContext } from "react";
+import PropTypes from "prop-types";
+import { useAuthCheck } from "../hooks/useAuth";
 
-const AuthContext = createContext();
+export const AuthContext = createContext();
 
+/**
+ * AuthProvider using React Query for authentication state management
+ *
+ * Features:
+ * - Automatic authentication checking with 5-minute refetch interval
+ * - Syncs user state with localStorage
+ * - Loading state managed by React Query
+ * - Error handling built into useAuthCheck hook
+ *
+ * Note: For logout functionality, components should use the useLogout hook directly
+ */
 export function AuthProvider({ children }) {
-  const [user, setUser] = useState(() => {
-    const storedUser = localStorage.getItem("user");
-    return storedUser ? JSON.parse(storedUser) : null;
-  });
-  const [loading, setLoading] = useState(true);
-  const navigate = useNavigate();
-  const API_URL = import.meta.env.VITE_API_URL;
+  // React Query handles all the heavy lifting:
+  // - Fetching user data
+  // - Caching and refetching
+  // - Loading and error states
+  // - localStorage sync
+  const { data: user, isLoading, error, refetch } = useAuthCheck();
 
-  const checkAuth = async () => {
-    try {
-      const response = await fetch(`${API_URL}/api/auth/check`, {
-        credentials: "include",
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-        },
-      });
-
-      const data = await response.json();
-
-      if (response.ok && data?.user) {
-        setUser(data.user);
-        localStorage.setItem("user", JSON.stringify(data.user));
-      } else if (response.status === 401) {
-        setUser(null);
-        localStorage.removeItem("user");
-      }
-    } catch (err) {
-      console.error("Auth check failed:", err);
-      const storedUser = localStorage.getItem("user");
-      if (storedUser) {
-        setUser(JSON.parse(storedUser));
-      }
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    checkAuth();
-    const intervalId = setInterval(checkAuth, 5 * 60 * 1000);
-    return () => clearInterval(intervalId);
-  }, []);
-
-  const logout = async () => {
-    try {
-      const response = await fetch(`${API_URL}/api/auth/logout`, {
-        method: "POST",
-        credentials: "include",
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-        },
-      });
-
-      if (!response.ok) {
-        throw new Error("Logout failed");
-      }
-    } catch (error) {
-      console.error("Logout error:", error);
-    } finally {
-      setUser(null);
-      localStorage.removeItem("user");
-      navigate("/");
-    }
-  };
-
-  if (loading) {
+  // Show loading spinner during initial authentication check
+  if (isLoading) {
     return (
       <div className="spinner-container">
         <div className="spinner"></div>
       </div>
     );
   }
+
   return (
-    <AuthContext.Provider value={{ user, setUser, logout, checkAuth }}>
+    <AuthContext.Provider value={{ user, isLoading, error, refetch }}>
       {children}
     </AuthContext.Provider>
   );
 }
 
-export const useAuth = () => useContext(AuthContext);
+AuthProvider.propTypes = {
+  children: PropTypes.node.isRequired,
+};

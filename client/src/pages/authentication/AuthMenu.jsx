@@ -1,10 +1,13 @@
-import { useAuth } from "../../context/AuthContext";
+import { useAuth } from "../../hooks/useAuthContext";
+import { useLogout } from "../../hooks/useAuth";
 import { Link, useLocation } from "react-router-dom";
 import { useState, useEffect, useRef } from "react";
 import Tooltip from "@mui/material/Tooltip";
+import PropTypes from "prop-types";
 
 export default function AuthMenu({ closeMenu }) {
-  const { user, logout } = useAuth();
+  const { user } = useAuth();
+  const logoutMutation = useLogout();
   const [open, setOpen] = useState(false);
   const location = useLocation();
   const isHome = location.pathname === "/";
@@ -59,7 +62,7 @@ export default function AuthMenu({ closeMenu }) {
           )}
           <button
             onClick={() => {
-              logout();
+              logoutMutation.mutate();
               closeMenuDropdown();
             }}
           >
@@ -70,3 +73,7 @@ export default function AuthMenu({ closeMenu }) {
     </div>
   );
 }
+
+AuthMenu.propTypes = {
+  closeMenu: PropTypes.func.isRequired,
+};

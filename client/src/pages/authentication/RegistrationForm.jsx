@@ -90,7 +90,7 @@ export default function RegistrationForm() {
       });
 
       if (response.ok) {
-        const result = await response.json();
+        await response.json();
         setSuccessMessage("User Registered Succesfully!");
         setFormData({
           name: "",

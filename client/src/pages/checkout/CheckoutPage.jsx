@@ -1,5 +1,5 @@
-import { useCart } from "../../context/CartContext";
-import { useRef, useState } from "react";
+import { useCart, useUpdateCartQuantity, useClearCart } from "../../hooks/useCart";
+import { useRef, useState, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import "./../../styles/checkout.css";
 import TransitionsModal from "./../../components/TransitionsModal.jsx";
@@ -7,7 +7,11 @@ import Cart from "./Cart";
 import CheckoutDetails from "./CheckoutDetails";
 
 export default function CheckoutPage() {
-  const { cart, updateQuantity, clearCart, totalPrice } = useCart();
+  const { data: cartData } = useCart();
+  const updateCartQuantity = useUpdateCartQuantity();
+  const clearCartMutation = useClearCart();
+  const cart = useMemo(() => cartData?.items || [], [cartData]);
+
   const [editingItem, setEditingItem] = useState(null);
   const [newQuantity, setNewQuantity] = useState(1);
   const [modalOpen, setModalOpen] = useState(false);
@@ -36,7 +40,7 @@ export default function CheckoutPage() {
       navToProductsPage.current = () => {
         navigate("/products");
       };
-      clearCart();
+      clearCartMutation.mutate();
     }
 
     scrollUp.current = () => {
@@ -49,15 +53,17 @@ export default function CheckoutPage() {
     setModalOpen(true);
   };
 
-  const calculateTotal = () => {
+  const displayedTotal = useMemo(() => {
+    if (cartData?.totalPrice) {
+      return cartData.totalPrice;
+    }
+    // Calculate total if not provided by backend
     return cart.reduce((acc, item) => {
       const price = Number(item.productId?.price) || 0;
       const quantity = Number(item.quantity) || 0;
       return acc + price * quantity;
     }, 0);
-  };
-
-  const displayedTotal = totalPrice || calculateTotal();
+  }, [cartData, cart]);
 
   const handleUpdateClick = (id, currentQuantity) => {
     setEditingItem(id);
@@ -75,7 +81,7 @@ export default function CheckoutPage() {
       setModalOpen(true);
       return;
     }
-    updateQuantity(id, newQuantity);
+    updateCartQuantity.mutate({ productId: id, quantity: newQuantity });
     setEditingItem(null);
   };
 

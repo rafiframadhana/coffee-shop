@@ -4,7 +4,7 @@ import Sidebar from "./Sidebar";
 import AddProduct from "./AddProduct";
 import ViewProducts from "./ViewProducts";
 import EditProduct from "./EditProduct";
-import { useAuth } from "../../context/AuthContext";
+import { useAuth } from "../../hooks/useAuthContext";
 import { useEffect } from "react";
 import UserManagement from "./UserManagement";
 

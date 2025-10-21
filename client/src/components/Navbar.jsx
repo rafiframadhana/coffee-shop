@@ -2,19 +2,21 @@ import { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import cartBlack from "./../assets/cart-black.png";
 import cartWhite from "./../assets/cart-white.png";
-import { useCart } from "../context/CartContext";
+import { useCart } from "../hooks/useCart";
 import MenuIcon from "@mui/icons-material/Menu";
 import CloseIcon from "@mui/icons-material/Close";
 import AuthMenu from "../pages/authentication/AuthMenu";
-import { useAuth } from "../context/AuthContext";
+import { useAuth } from "../hooks/useAuthContext";
 import Tooltip from "@mui/material/Tooltip";
+import { useMemo } from "react";
 
 export default function Navbar() {
   const [isMobile, setIsMobile] = useState(window.innerWidth < 1224);
   const [menuOpen, setMenuOpen] = useState(false);
-  const { user, logout } = useAuth();
-  const { cart } = useCart();
-  const itemQuantity = cart.reduce((total, item) => total + item.quantity, 0);
+  const { user } = useAuth();
+  const { data: cartData } = useCart();
+  const cart = useMemo(() => cartData?.items || [], [cartData]);
+  const itemQuantity = useMemo(() => cart.reduce((total, item) => total + item.quantity, 0), [cart]);
   const location = useLocation();
   const isHome = location.pathname === "/";
   const isAuthPage = location.pathname === "/auth/register" || location.pathname === "/auth/login";
@@ -94,7 +96,7 @@ export default function Navbar() {
           )}
           {isMobile && (
             <div className="auth-menu-navbar">
-              <AuthMenu user={user} onLogout={logout} />
+              <AuthMenu closeMenu={() => setMenuOpen(false)} />
             </div>
           )}
         </ul>
@@ -123,7 +125,7 @@ export default function Navbar() {
 
           {!isMobile && (
             <div className="auth-menu-navbar">
-              <AuthMenu user={user} onLogout={logout} />
+              <AuthMenu closeMenu={() => setMenuOpen(false)} />
             </div>
           )}
         </div>

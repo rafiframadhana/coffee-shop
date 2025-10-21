@@ -14,7 +14,8 @@
       "NotebookEdit",
       "TodoRead",
       "TodoWrite",
-      "WebSearch"
+      "WebSearch",
+      "Bash(npx eslint:*)"
     ],
     "deny": []
   }
