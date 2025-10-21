@@ -51,6 +51,12 @@ export default function ProductDetails() {
       return;
     }
 
+    // Show success message immediately (optimistic UI)
+    setAddedMessage("Added");
+    setTimeout(() => {
+      setAddedMessage("");
+    }, 1000);
+
     try {
       // Get current cart items
       const currentItems = cart?.items || [];
@@ -85,12 +91,6 @@ export default function ProductDetails() {
 
       // Update cart using React Query mutation with optimistic updates
       await updateCart.mutateAsync(updatedItems);
-
-      // Show success message
-      setAddedMessage("Added");
-      setTimeout(() => {
-        setAddedMessage("");
-      }, 1000);
     } catch (error) {
       console.error("Failed to add to cart:", error);
     }
