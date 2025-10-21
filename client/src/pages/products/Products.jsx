@@ -58,6 +58,9 @@ export default function Product() {
       return;
     }
 
+    // Show success message immediately (optimistic UI)
+    addToCartMessage(product._id);
+
     // Get quantity from state or default to 1
     const quantity = quantities[product._id] || 1;
 
@@ -95,9 +98,6 @@ export default function Product() {
 
       // Update cart using React Query mutation with optimistic updates
       await updateCart.mutateAsync(updatedItems);
-
-      // Show success message
-      addToCartMessage(product._id);
     } catch (error) {
       console.error("Failed to add to cart:", error);
       // Error handling is done in the mutation itself
