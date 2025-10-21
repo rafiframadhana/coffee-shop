@@ -1,100 +1,27 @@
 import { Router } from "express";
-import Cart from "./../models/cart.js";
+import * as cartController from "../controllers/cart.controller.js";
+import { validateUpdateCart, validateUpdateQuantity, validateDeleteCartItem } from "../validators/cart.validator.js";
+import { validateRequest, asyncHandler } from "../middlewares/errorHandler.js";
 import { isAuthenticated } from "../utils/middlewares.js";
 
 const router = Router();
 
-// GET all user's cart item/items
-router.get("/", isAuthenticated, async (req, res) => {
-  try {
-    const cart = await Cart.findOne({ user: req.user._id }).populate(
-      "items.productId"
-    );
+// All cart routes require authentication
+router.use(isAuthenticated);
 
-    if (!cart) {
-      return res.json({ items: [], totalPrice: 0 });
-    }
+// GET user's cart
+router.get("/", asyncHandler(cartController.getCart));
 
-    const totalPrice = cart.items.reduce((acc, item) => {
-      const price = item.productId?.price || 0;
-      const quantity = item.quantity || 0;
-      return acc + price * quantity;
-    }, 0);
+// Update cart (POST)
+router.post("/", validateUpdateCart, validateRequest, asyncHandler(cartController.updateCart));
 
-    res.json({ items: cart.items, totalPrice });
-  } catch (err) {
-    res.status(500).json({ error: "Failed to load cart" });
-  }
-});
+// Delete all cart items
+router.delete("/", asyncHandler(cartController.clearCart));
 
-// Update cart (*quantity)
-router.post("/", isAuthenticated, async (req, res) => {
-  try {
-    const { items } = req.body;
+// Delete specific cart item
+router.delete("/item/:productId", validateDeleteCartItem, validateRequest, asyncHandler(cartController.deleteCartItem));
 
-    const updatedCart = await Cart.findOneAndUpdate(
-      { user: req.user._id },
-      { user: req.user._id, items },
-      { upsert: true, new: true }
-    ).populate("items.productId");
-
-    res.json(updatedCart);
-  } catch (err) {
-    res.status(500).json({ error: "Failed to save cart" });
-  }
-});
-
-// Delete all user's cart item/items
-router.delete("/", isAuthenticated, async (req, res) => {
-  try {
-    await Cart.deleteOne({ user: req.user._id });
-    res.json({ message: "Cart cleared" });
-  } catch (err) {
-    res.status(500).json({ error: "Failed to clear cart" });
-  }
-});
-
-// Delete cart item by id
-router.delete("/item/:productId", isAuthenticated, async (req, res) => {
-  try {
-    const productId = req.params.productId;
-
-    const cart = await Cart.findOne({ user: req.user._id });
-
-    if (!cart) return res.status(404).json({ error: "Cart not found" });
-
-    cart.items = cart.items.filter(
-      (item) => item.productId.toString() !== productId
-    );
-    await cart.save();
-
-    res.json({ message: "Item removed", cart });
-  } catch (err) {
-    res.status(500).json({ error: "Failed to delete item" });
-  }
-});
-
-//Update cart Item by id
-router.patch("/item/:productId", isAuthenticated, async (req, res) => {
-  try {
-    const productId = req.params.productId;
-    const { quantity } = req.body;
-
-    const cart = await Cart.findOne({ user: req.user._id });
-
-    if (!cart) return res.status(404).json({ error: "Cart not found" });
-
-    const item = cart.items.find((i) => i.productId.toString() === productId);
-
-    if (!item) return res.status(404).json({ error: "Item not found in cart" });
-
-    item.quantity = quantity;
-    await cart.save();
-
-    res.json({ message: "Quantity updated", cart });
-  } catch (err) {
-    res.status(500).json({ error: "Failed to update quantity" });
-  }
-});
+// Update cart item quantity
+router.patch("/item/:productId", validateUpdateQuantity, validateRequest, asyncHandler(cartController.updateCartItemQuantity));
 
 export default router;

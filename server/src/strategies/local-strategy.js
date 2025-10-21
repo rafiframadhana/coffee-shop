@@ -9,7 +9,7 @@ export default passport.use(
       const findUser = await User.findOne({ username });
       if (!findUser) return done(null, false, { message: "User not Found" });
 
-      const isMatch = comparePassword(password, findUser.password);
+      const isMatch = await comparePassword(password, findUser.password);
       if (!isMatch) return done(null, false, { message: "Invalid Password" });
 
       return done(null, findUser);

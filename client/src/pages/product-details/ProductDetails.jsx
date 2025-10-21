@@ -29,8 +29,9 @@ export default function ProductDetails() {
         const response = await fetch(`${API_URL}/api/coffee/${productId}`, {
           credentials: "include",
         });
-        const data = await response.json();
-        setProduct(data);
+        const result = await response.json();
+        // Handle standardized response format { success, message, data }
+        setProduct(result.data || result);
       } catch (error) {
         console.error("Error fetching data:", error);
         setError("Failed to load products");
@@ -39,7 +40,7 @@ export default function ProductDetails() {
       }
     };
     fetchProductById();
-  }, [productId]);
+  }, [productId, API_URL]); // Added API_URL to deps
 
   if (loading) {
     return (

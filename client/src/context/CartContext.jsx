@@ -3,6 +3,7 @@ import { useAuth } from "./AuthContext";
 
 const CartContext = createContext();
 
+// eslint-disable-next-line react/prop-types
 export const CartProvider = ({ children }) => {
   const [cart, setCart] = useState(() => {
     const savedCart = localStorage.getItem("cart");
@@ -30,8 +31,10 @@ export const CartProvider = ({ children }) => {
         credentials: "include",
       });
       if (!res.ok) throw new Error("Failed to fetch cart");
-      const data = await res.json();
+      const response = await res.json();
 
+      // Handle standardized response format { success, message, data }
+      const data = response.data || response;
       setCart(data.items || []);
       setTotalPrice(data.totalPrice || 0);
     } catch (err) {
@@ -81,8 +84,10 @@ export const CartProvider = ({ children }) => {
       if (!response.ok) throw new Error("Failed to update cart");
 
       await fetchCart();
-      const data = await response.json();
+      const result = await response.json();
 
+      // Handle standardized response format { success, message, data }
+      const data = result.data || result;
       setCart(
         data.items.map((item) => ({
           productId: item.productId._id || item.productId,
@@ -169,6 +174,7 @@ export const CartProvider = ({ children }) => {
   );
 };
 
+// eslint-disable-next-line react-refresh/only-export-components
 export const useCart = () => {
   return useContext(CartContext);
 };

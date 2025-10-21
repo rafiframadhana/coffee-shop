@@ -8,7 +8,9 @@ const UserSchema = new mongoose.Schema({
   username: {
     type: String,
     required: true,
-    unique: true
+    unique: true,
+    lowercase: true,
+    trim: true,
   },
   password: {
     type: String,
@@ -23,7 +25,11 @@ const UserSchema = new mongoose.Schema({
     enum: ["user", "admin"],
     default: "user",
   }
+}, {
+  timestamps: true, // Add createdAt and updatedAt
 });
+
+// Note: username index is automatically created by unique: true
 
 const User = mongoose.model("User", UserSchema);
 

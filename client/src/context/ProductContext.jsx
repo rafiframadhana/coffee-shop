@@ -2,6 +2,7 @@ import { createContext, useContext, useState, useEffect } from "react";
 
 const ProductsContext = createContext();
 
+// eslint-disable-next-line react/prop-types
 export const ProductsProvider = ({ children }) => {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -15,8 +16,9 @@ export const ProductsProvider = ({ children }) => {
         const res = await fetch(`${API_URL}/api/coffee`, {
           credentials: "include",
         });
-        const data = await res.json();
-        setProducts(data);
+        const response = await res.json();
+        // Handle new standardized response format { success, message, data }
+        setProducts(response.data || response);
       } catch (error) {
         console.error("Error fetching data:", error);
         setError("Failed to load products");
@@ -26,7 +28,7 @@ export const ProductsProvider = ({ children }) => {
     };
 
     fetchProducts();
-  }, []);
+  }, [API_URL]); // Added API_URL to deps
 
   return (
     <ProductsContext.Provider value={{ products, setProducts, loading, error }}>
@@ -35,4 +37,5 @@ export const ProductsProvider = ({ children }) => {
   );
 };
 
+// eslint-disable-next-line react-refresh/only-export-components
 export const useProducts = () => useContext(ProductsContext);

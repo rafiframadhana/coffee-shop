@@ -22,8 +22,11 @@ const cartSchema = new mongoose.Schema({
     unique: true,
   },
   items: [cartItemSchema],
+}, {
+  timestamps: true, // Add createdAt and updatedAt
 });
 
+// Note: user index is automatically created by unique: true
 
 export const Cart = mongoose.model("Cart", cartSchema);
 

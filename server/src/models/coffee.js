@@ -5,6 +5,7 @@ const coffeeSchema = new mongoose.Schema({
     type: String,
     required: true,
     unique: true,
+    trim: true,
   },
   src: {
     type: String,
@@ -13,16 +14,25 @@ const coffeeSchema = new mongoose.Schema({
   contain: {
     type: String,
     required: true,
+    trim: true,
   },
   price: {
     type: Number,
     required: true,
+    min: 0,
   },
   description: {
     type: String,
     required: true,
+    trim: true,
   },
+}, {
+  timestamps: true, // Add createdAt and updatedAt
 });
+
+// Note: item index is automatically created by unique: true
+// Index for price-based sorting/filtering
+coffeeSchema.index({ price: 1 });
 
 const Coffee = mongoose.model("Coffee", coffeeSchema);
 
