@@ -1,10 +1,12 @@
 import "./../../styles/user-profile.css";
-import { useAuth } from "../../context/AuthContext";
+import { useAuth } from "../../hooks/useAuthContext";
+import { useLogout } from "../../hooks/useAuth";
 import LogoutIcon from "@mui/icons-material/Logout";
 import EditIcon from "@mui/icons-material/Edit";
 
 function UserProfile() {
-  const { user, loading, error, logout } = useAuth();
+  const { user, isLoading: loading, error } = useAuth();
+  const logoutMutation = useLogout();
 
   return (
     <div className="user-profile-page">
@@ -24,7 +26,7 @@ function UserProfile() {
               Edit Profile
             </button>
 
-            <button onClick={logout} className="btn-profile danger icon-btn">
+            <button onClick={() => logoutMutation.mutate()} className="btn-profile danger icon-btn">
               <LogoutIcon className="icon" />
               Logout
             </button>

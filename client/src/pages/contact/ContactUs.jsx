@@ -5,8 +5,8 @@ export default function ContactUs() {
         <div className="contact-page-info">
           <h2>Contact us</h2>
           <p>
-            Have questions or feedback? We'd love to hear from you! Drop us a
-            message, and we’ll get back to you as soon as possible.
+            Have questions or feedback? We&apos;d love to hear from you! Drop us a
+            message, and we&apos;ll get back to you as soon as possible.
           </p>
           <div className="contact-page-details">
             <p>

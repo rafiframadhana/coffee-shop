@@ -1,8 +1,8 @@
 import { Link } from "react-router-dom";
-import { useProducts } from "../../context/ProductContext";
+import { useProducts } from "../../hooks/useProducts";
 
 export default function MenuHP() {
-  const { products, loading, error } = useProducts();
+  const { data: products = [], isLoading: loading, error } = useProducts();
 
   if (loading) {
     return (

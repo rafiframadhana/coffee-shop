@@ -1,6 +1,6 @@
-import { useState } from "react";
+import { useState, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
-import { useAuth } from "../../context/AuthContext";
+import { useLogin } from "../../hooks/useAuth";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 
@@ -12,9 +12,9 @@ export default function LoginForm() {
   const [formErrors, setFormErrors] = useState({});
   const [successMessage, setSuccessMessage] = useState("");
   const [showPassword, setShowPassword] = useState(false);
-  const { setUser } = useAuth();
+
   const navigate = useNavigate();
-  const API_URL = import.meta.env.VITE_API_URL;
+  const login = useLogin();
 
   const validate = (field, value) => {
     let error = "";
@@ -51,9 +51,10 @@ export default function LoginForm() {
     setShowPassword((prev) => !prev);
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = useCallback(async (e) => {
     e.preventDefault();
 
+    // Validate form fields
     const errors = {};
     Object.keys(formData).forEach((field) => {
       const error = validate(field, formData[field]);
@@ -66,40 +67,32 @@ export default function LoginForm() {
     }
 
     try {
-      const response = await fetch(`${API_URL}/api/auth/login`, {
-        method: "POST",
-        credentials: "include",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          username: formData.username,
-          password: formData.password,
-        }),
+      // Use React Query mutation for login
+      await login.mutateAsync({
+        username: formData.username,
+        password: formData.password,
       });
 
-      if (response.ok) {
-        const result = await response.json();
-        setSuccessMessage("Login Successfully!");
-        // Set user first before redirecting
-        setUser(result.user);
-        localStorage.setItem("user", JSON.stringify(result.user));
-        setFormData({
-          username: "",
-          password: "",
-        });
-        navigate("/");
-      } else {
-        const errorJson = await response.json().catch(() => ({}));
-        setFormErrors({
-          general: "Login failed: " + (errorJson.error || "Unknown Error"),
-        });
-      }
+      // Show success message
+      setSuccessMessage("Login Successfully!");
+
+      // Reset form
+      setFormData({
+        username: "",
+        password: "",
+      });
+
+      // Navigate to home - useLogin hook handles user state update
+      navigate("/");
     } catch (err) {
-      setFormErrors({ general: "Error connecting to server" });
-      console.log(err);
+      // Error handling
+      const errorMessage = err.response?.data?.message || err.message || "Error connecting to server";
+      setFormErrors({
+        general: "Login failed: " + errorMessage,
+      });
+      console.error(err);
     }
-  };
+  }, [formData, login, navigate]);
 
   return (
     <div className="form-wrapper">

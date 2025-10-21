@@ -1,5 +1,4 @@
 import "./../../styles/auth.css";
-import coffeImg from "/background/hero/hero-bg.png";
 import { Outlet } from "react-router-dom";
 
 function Authentication() {

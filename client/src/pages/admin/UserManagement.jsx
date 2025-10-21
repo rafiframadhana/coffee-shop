@@ -42,8 +42,9 @@ function UserManagement() {
         const res = await fetch(`${API_URL}/api/user`, {
           credentials: "include",
         });
-        const data = await res.json();
-        setUsers(data);
+        const response = await res.json();
+        // Handle standardized response format { success, message, data }
+        setUsers(response.data || response);
       } catch (error) {
         console.error("Error fetching data:", error);
         setError("Failed to load users");
@@ -53,7 +54,7 @@ function UserManagement() {
     };
 
     fetchUsers();
-  }, []);
+  }, [API_URL]); // Added API_URL to deps
 
   useEffect(() => {
     if (success || error) {

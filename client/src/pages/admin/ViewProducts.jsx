@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useMemo, useCallback } from "react";
 import ViewListIcon from "@mui/icons-material/ViewList";
 import {
   Table,
@@ -14,36 +14,41 @@ import RemoveRedEyeIcon from "@mui/icons-material/RemoveRedEye";
 import SearchIcon from "@mui/icons-material/Search";
 import Tooltip from "@mui/material/Tooltip";
 import ContentCopyRoundedIcon from "@mui/icons-material/ContentCopyRounded";
-import { useProducts } from "../../context/ProductContext";
+import { useProducts } from "../../hooks/useProducts";
+import { filterBySearch, truncateText } from "../../utils/search";
+import { formatCurrency } from "../../utils/format";
 
 function ViewProducts() {
   const [searchTerm, setSearchTerm] = useState("");
-  const { products, loading, error } = useProducts();
 
-  if (loading) {
+  // React Query hook for products data
+  const { data: products = [], isLoading, error } = useProducts();
+
+  // Memoized filtered products using utility function
+  const filteredProducts = useMemo(() => {
+    return filterBySearch(products, searchTerm, [
+      'item',
+      'description',
+      'contain',
+      'src',
+      'price',
+      '_id'
+    ]);
+  }, [products, searchTerm]);
+
+  // Memoized copy to clipboard handler
+  const handleCopyToClipboard = useCallback((text) => {
+    navigator.clipboard.writeText(text);
+  }, []);
+
+  // Handle loading state
+  if (isLoading) {
     return (
       <div className="spinner-container">
         <div className="spinner"></div>
       </div>
     );
   }
-
-  function truncateText(text, maxLength) {
-    if (!text) return "";
-    return text.length > maxLength ? text.slice(0, maxLength) + "..." : text;
-  }
-
-  const filteredProducts = products.filter((product) => {
-    const lowerCaseSearch = searchTerm.toLowerCase();
-    return (
-      product.item.toLowerCase().includes(lowerCaseSearch) ||
-      product.description.toLowerCase().includes(lowerCaseSearch) ||
-      product.contain.toLowerCase().includes(lowerCaseSearch) ||
-      product.src.toLowerCase().includes(lowerCaseSearch) ||
-      String(product.price).toLowerCase().includes(lowerCaseSearch) ||
-      product._id.toLowerCase().includes(lowerCaseSearch)
-    );
-  });
 
   return (
     <>
@@ -139,7 +144,7 @@ function ViewProducts() {
                               color: "black",
                             },
                           }}
-                          onClick={() => navigator.clipboard.writeText(_id)}
+                          onClick={() => handleCopyToClipboard(_id)}
                         />
                       </Tooltip>
                     </TableCell>
@@ -172,7 +177,7 @@ function ViewProducts() {
                               color: "black",
                             },
                           }}
-                          onClick={() => navigator.clipboard.writeText(src)}
+                          onClick={() => handleCopyToClipboard(src)}
                         />
                       </Tooltip>
                     </TableCell>
@@ -185,11 +190,7 @@ function ViewProducts() {
                       {contain}
                     </TableCell>
                     <TableCell>
-                      {new Intl.NumberFormat("id-ID", {
-                        style: "currency",
-                        currency: "IDR",
-                        minimumFractionDigits: 0,
-                      }).format(price)}
+                      {formatCurrency(price)}
                     </TableCell>
 
                     <TableCell
@@ -240,7 +241,7 @@ function ViewProducts() {
       </Box>
 
       <div className="notification-container">
-        {error && <p className="notification error">{error}</p>}
+        {error && <p className="notification error">{error.message || "Failed to load products"}</p>}
       </div>
     </>
   );

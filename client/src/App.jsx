@@ -15,7 +15,7 @@ import { useEffect, useState } from "react";
 import Authentication from "./pages/authentication/Authentication.jsx";
 import RegistrationForm from "./pages/authentication/RegistrationForm.jsx";
 import LoginForm from "./pages/authentication/LoginForm.jsx";
-import { useAuth } from "./context/AuthContext.jsx";
+import { useAuth } from "./hooks/useAuthContext";
 import UserProfile from "./pages/profile/UserProfile.jsx";
 
 function App() {

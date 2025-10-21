@@ -1,3 +1,5 @@
+import PropTypes from "prop-types";
+
 export default function CheckoutDetails({ total, handleSubmit }) {
   return (
     <div className="checkout-details">
@@ -51,3 +53,8 @@ export default function CheckoutDetails({ total, handleSubmit }) {
     </div>
   );
 }
+
+CheckoutDetails.propTypes = {
+  total: PropTypes.number.isRequired,
+  handleSubmit: PropTypes.func.isRequired,
+};
