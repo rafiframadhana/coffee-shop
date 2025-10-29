@@ -19,16 +19,33 @@ import "./../src/strategies/local-strategy.js";
 
 const app = express();
 
-// Initialize database connection (must complete before session setup)
-let isDbConnected = false;
-connectDB()
-  .then(() => {
-    isDbConnected = true;
-    logger.info('Database connected successfully');
-  })
-  .catch((err) => {
-    logger.error('Failed to connect to database:', err);
-  });
+// Ensure database connection before handling requests
+let dbConnectionPromise = null;
+
+const ensureDbConnection = async () => {
+  if (!dbConnectionPromise) {
+    dbConnectionPromise = connectDB().catch((err) => {
+      logger.error('Failed to connect to database:', err);
+      dbConnectionPromise = null; // Reset on failure to allow retry
+      throw err;
+    });
+  }
+  return dbConnectionPromise;
+};
+
+// Middleware to ensure DB is connected before processing requests
+app.use(async (req, res, next) => {
+  try {
+    await ensureDbConnection();
+    next();
+  } catch (error) {
+    logger.error('Database connection failed:', error);
+    res.status(503).json({
+      success: false,
+      message: 'Service temporarily unavailable - database connection failed'
+    });
+  }
+});
 
 // Security middleware - helmet
 app.use(helmet({
