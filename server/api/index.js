@@ -19,11 +19,16 @@ import "./../src/strategies/local-strategy.js";
 
 const app = express();
 
-// Initialize database connection (now async)
-connectDB().catch((err) => {
-  logger.error('Failed to connect to database:', err);
-  process.exit(1);
-});
+// Initialize database connection (must complete before session setup)
+let isDbConnected = false;
+connectDB()
+  .then(() => {
+    isDbConnected = true;
+    logger.info('Database connected successfully');
+  })
+  .catch((err) => {
+    logger.error('Failed to connect to database:', err);
+  });
 
 // Security middleware - helmet
 app.use(helmet({
@@ -45,19 +50,35 @@ app.use(cookieParser());
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 
-// CORS configuration
+// CORS configuration - support both production and development
+const allowedOrigins = [
+  process.env.CORS_ORIGIN,
+  "https://coffeeculture-id.netlify.app",
+  "http://localhost:5173"
+].filter(Boolean);
+
 app.use(cors({
-  origin: [process.env.CORS_ORIGIN, "http://localhost:5173"],
+  origin: function (origin, callback) {
+    // Allow requests with no origin (like mobile apps, Postman, curl)
+    if (!origin) return callback(null, true);
+
+    if (allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      logger.warn(`Blocked CORS request from origin: ${origin}`);
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
   credentials: true,
-  methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
+  methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
   allowedHeaders: ["Content-Type", "Authorization"],
   exposedHeaders: ["set-cookie"]
 }));
 
-// Session configuration
+// Session configuration - use MongoDB URI for serverless
 app.use(
   session({
-    secret: process.env.SESSION_SECRET,
+    secret: process.env.SESSION_SECRET || 'default-secret-change-in-production',
     saveUninitialized: false,
     resave: false,
     proxy: true,
@@ -68,10 +89,11 @@ app.use(
       httpOnly: SESSION.COOKIE_HTTP_ONLY,
     },
     store: MongoStore.create({
-      client: mongoose.connection.getClient(),
+      mongoUrl: process.env.MONGO_URI,
       dbName: "coffee_shop",
       collectionName: "sessions",
-      ttl: SESSION.MAX_AGE / 1000 // Convert to seconds
+      ttl: SESSION.MAX_AGE / 1000, // Convert to seconds
+      touchAfter: 24 * 3600 // Lazy session update (seconds)
     })
   })
 );
@@ -82,6 +104,9 @@ app.use(passport.session());
 
 // Rate limiting (applied globally)
 app.use(generalLimiter);
+
+// Handle preflight requests explicitly
+app.options('*', cors());
 
 // Health check endpoint
 app.get('/health', (req, res) => {
